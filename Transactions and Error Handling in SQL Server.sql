@@ -1,5 +1,48 @@
 1. Starting with error handling
 </> The TRY…CATCH syntax
+</> Nesting TRY…CATCH constructs
+</> Anatomy review
+</> Correcting compilation errors
+</> Error function syntax
+</> Using error functions
+</> Using error functions in a nested TRY…CATCH
+2. Raising, throwing and customizing your errors
+</> RAISERROR syntax
+</> CATCHING the RAISERROR
+</> THROW with or without parameters
+</> THROW without parameters
+</> Executing a stored procedure that throws an error
+</> THROW with parameters
+</> Ways of customizing error messages
+</> Concatenating the message
+</> FORMATMESSAGE with message string
+</> FORMATMESSAGE with message number
+3. Transactions in SQL Server
+</> Transaction statements
+</> Correcting a transaction
+</> Rolling back a transaction if there is an error
+</> Choosing when to commit or rollback a transaction
+</> Modifiers of the @@TRANCOUNT value
+</> Checking @@TRANCOUNT in a TRY…CATCH construct
+</> Using savepoints
+</> XACT_ABORT behavior
+</> XACT_ABORT and THROW
+</> Doomed transactions
+4. Controlling the concurrency: Transaction isolation levels
+</> Concurrency phenomena
+</> Using the READ UNCOMMITTED isolation level
+</> Choosing the correct isolation level
+</> Prevent dirty reads
+</> Preventing non-repeatable reads
+</> Prevent phantom reads in a table
+</> Prevent phantom reads just in some rows
+</> Setting READ COMMITTED SNAPSHOT to ON
+</> Comparing WITH (NOLOCK) & READ UNCOMMITTED
+</> Avoid being blocked
+
+
+1. Starting with error handling
+</> The TRY…CATCH syntax
 
 BEGIN TRY
     INSERT INTO products (product_name, stock, price)
