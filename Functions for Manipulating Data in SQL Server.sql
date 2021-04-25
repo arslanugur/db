@@ -1,5 +1,3 @@
-# 
-
 
 # Types of character strings
 ALTER TABLE voters 
