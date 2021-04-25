@@ -1,8 +1,8 @@
 # Databases Research & Exercises
 
- - Databases: Relational Databases and SQL
- - Databases: OLAP and Recursion
- - Databases: Semistructured Data
- - Databases: Modeling and Theory
- - Databases: Advanced Topics in SQL
- - Career Track: Data Analyst with SQL Server on DataCamp
+ - Databases: Relational Databases and SQL by Stanford University
+ - Databases: OLAP and Recursion by Stanford University
+ - Databases: Semistructured Data by Stanford University
+ - Databases: Modeling and Theory by Stanford University
+ - Databases: Advanced Topics in SQL by Stanford University
+ - Career Track: Data Analyst with SQL Server on DataCamp by DataCamp
