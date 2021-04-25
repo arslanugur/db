@@ -16,30 +16,239 @@
 </> Ways of customizing error messages
 </> Concatenating the message
 </> FORMATMESSAGE with message string
+DECLARE @product_name AS NVARCHAR(50) = 'Trek CrossRip+ - 2018';
+-- Set the number of sold bikes
+DECLARE @sold_bikes AS INT = 10;
+DECLARE @current_stock INT;
+
+SELECT @current_stock = stock FROM products WHERE product_name = @product_name;
+
+DECLARE @my_message NVARCHAR(500) =
+	-- Customize the error message
+	FORMATMESSAGE('There are not enough %s bikes. You have %d in stock.', @product_name, @current_stock);
+
+IF (@current_stock - @sold_bikes < 0)
+	-- Throw the error
+	THROW 50000, @my_message, 1;
+	
 </> FORMATMESSAGE with message number
+-- Pass the variables to the stored procedure 
+EXEC sp_addmessage @msgnum = 50002, @severity = 16, @msgtext = 'There are not enough %s bikes. You only have %d in stock.', @lang = N'us_english';
+
+EXEC sp_addmessage @msgnum = 50002, @severity = 16, @msgtext = 'There are not enough %s bikes. You only have %d in stock.', @lang = N'us_english';
+
+DECLARE @product_name AS NVARCHAR(50) = 'Trek CrossRip+ - 2018';
+DECLARE @sold_bikes AS INT = 10;
+DECLARE @current_stock INT;
+
+SELECT @current_stock = stock FROM products WHERE product_name = @product_name;
+
+DECLARE @my_message NVARCHAR(500) =
+	-- Prepare the error message
+	FORMATMESSAGE(50002, @product_name, @current_stock);
+
+IF (@current_stock - @sold_bikes < 0)
+	-- Throw the error
+	THROW 50000, @my_message, 1;
+	
+	
 3. Transactions in SQL Server
 </> Transaction statements
 </> Correcting a transaction
+BEGIN TRY  
+	BEGIN TRAN; 
+		UPDATE accounts SET current_balance = current_balance - 100 WHERE account_id = 1;
+		INSERT INTO transactions VALUES (1, -100, GETDATE());
+        
+		UPDATE accounts SET current_balance = current_balance + 100 WHERE account_id = 5;
+		INSERT INTO transactions VALUES (5, 100, GETDATE());
+	COMMIT TRAN;     
+END TRY
+BEGIN CATCH  
+	ROLLBACK TRAN;
+END CATCH
+
 </> Rolling back a transaction if there is an error
+BEGIN TRY  
+	BEGIN TRAN;
+		UPDATE accounts SET current_balance = current_balance - 100 WHERE account_id = 1;
+		INSERT INTO transactions VALUES (1, -100, GETDATE());
+        
+		UPDATE accounts SET current_balance = current_balance + 100 WHERE account_id = 5;
+		INSERT INTO transactions VALUES (5, 100, GETDATE());
+	COMMIT TRAN;
+END TRY
+BEGIN CATCH  
+	ROLLBACK TRAN;
+END CATCH
+
 </> Choosing when to commit or rollback a transaction
+BEGIN TRAN; 
+	UPDATE accounts set current_balance = current_balance + 100
+		WHERE current_balance < 5000;
+	IF @@ROWCOUNT > 200 
+		BEGIN 
+			ROLLBACK TRAN; 
+			SELECT 'More accounts than expected. Rolling back'; 
+		END
+	ELSE
+		BEGIN 
+			COMMIT TRAN; 
+			SELECT 'Updates commited'; 
+		END
+		
 </> Modifiers of the @@TRANCOUNT value
 </> Checking @@TRANCOUNT in a TRY…CATCH construct
+BEGIN TRY
+	BEGIN TRAN;
+		UPDATE accounts SET current_balance = current_balance + 200
+			WHERE account_id = 10;
+		IF @@TRANCOUNT > 0     
+			COMMIT TRAN;
+     
+	SELECT * FROM accounts
+    	WHERE account_id = 10;      
+END TRY
+BEGIN CATCH  
+    SELECT 'Rolling back the transaction'; 
+    IF @@TRANCOUNT > 0   	
+        ROLLBACK TRAN;
+END CATCH
+
 </> Using savepoints
+BEGIN TRAN;
+	-- Mark savepoint1
+	SAVE TRAN savepoint1;
+	INSERT INTO customers VALUES ('Mark', 'Davis', 'markdavis@mail.com', '555909090');
+
+	-- Mark savepoint2
+    SAVE TRAN savepoint2;
+	INSERT INTO customers VALUES ('Zack', 'Roberts', 'zackroberts@mail.com', '555919191');
+
+	-- Rollback savepoint2
+	ROLLBACK TRAN savepoint2;
+    -- Rollback savepoint1
+	ROLLBACK TRAN savepoint1;
+
+	-- Mark savepoint3
+	SAVE TRAN savepoint3;
+	INSERT INTO customers VALUES ('Jeremy', 'Johnsson', 'jeremyjohnsson@mail.com', '555929292');
+-- Commit the transaction
+COMMIT TRAN;
+
+
 </> XACT_ABORT behavior
 </> XACT_ABORT and THROW
+-- Use the appropriate setting
+SET XACT_ABORT ON;
+-- Begin the transaction
+BEGIN TRAN; 
+	UPDATE accounts set current_balance = current_balance - current_balance * 0.01 / 100
+		WHERE current_balance > 5000000;
+	IF @@ROWCOUNT <= 10	
+    	-- Throw the error
+		THROW 55000, 'Not enough wealthy customers!', 1;
+	ELSE		
+    	-- Commit the transaction
+		COMMIT TRAN; 
+		
 </> Doomed transactions
+SET XACT_ABORT ON;
+BEGIN TRY
+	BEGIN TRAN;
+		INSERT INTO customers VALUES ('Mark', 'Davis', 'markdavis@mail.com', '555909090');
+		INSERT INTO customers VALUES ('Dylan', 'Smith', 'dylansmith@mail.com', '555888999');
+	COMMIT TRAN;
+END TRY
+BEGIN CATCH
+	IF XACT_STATE() <> 0
+		ROLLBACK TRAN;
+    SELECT ERROR_MESSAGE() AS Error_message;
+END CATCH
+
+
 4. Controlling the concurrency: Transaction isolation levels
 </> Concurrency phenomena
 </> Using the READ UNCOMMITTED isolation level
+-- Set the appropriate isolation level
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+-- Select first_name, last_name, email and phone
+	SELECT
+    	first_name, 
+        last_name, 
+        email,
+        phone
+    FROM customers;
+    
 </> Choosing the correct isolation level
 </> Prevent dirty reads
+-- Set the appropriate isolation level
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED
+-- Count the accounts
+SELECT COUNT(*) AS number_of_accounts
+FROM accounts
+WHERE current_balance >= 50000;
+
 </> Preventing non-repeatable reads
+-- Set the appropriate isolation level
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ
+
+-- Begin a transaction
+BEGIN TRAN;
+
+SELECT * FROM customers;
+
+-- some mathematical operations, don't care about them...
+
+SELECT * FROM customers;
+
+-- Commit the transaction
+COMMIT TRAN;
+
 </> Prevent phantom reads in a table
+-- Set the appropriate isolation level
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE
+
+-- Begin a transaction
+BEGIN TRAN;
+
+SELECT * FROM customers;
+
+-- After some mathematical operations, we selected information from the customers table.
+SELECT * FROM customers;
+
+-- Commit the transaction
+COMMIT TRAN;
+
 </> Prevent phantom reads just in some rows
+-- Set the appropriate isolation level
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE
+
+-- Begin a transaction
+BEGIN TRAN
+
+-- Select customer_id between 1 and 10
+SELECT * 
+FROM customers
+WHERE customer_id BETWEEN 1 AND 10;
+
+-- After completing some mathematical operation, select customer_id between 1 and 10
+SELECT * 
+FROM customers
+WHERE customer_id BETWEEN 1 AND 10;
+
+-- Commit the transaction
+COMMIT TRAN
+
+
 </> Setting READ COMMITTED SNAPSHOT to ON
 </> Comparing WITH (NOLOCK) & READ UNCOMMITTED
 </> Avoid being blocked
+SELECT *
+	FROM transactions WITH (NOLOCK)
+WHERE account_id = 1
 
+-------------------------------------------------------------------------------
 
 1. Starting with error handling
 </> The TRY…CATCH syntax
