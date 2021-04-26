@@ -1105,17 +1105,354 @@ It does this by using IS NULL in a WHERE filter condition of the right query to 
 Students are introduced 
 to how STATISTICS TIME, STATISTICS IO, indexes, and executions plans can be used in SQL Server to help analyze and tune query performance.
 
-4.1. Time statistics
+4.1. Time statistics - Video
+In this final chapter, we'll introduce some tools and commands available in SQL Server to help analyze and tune query performance.
+
+SQL Server Management Studio
+Most SQL Server practitioners use SQL Server Management Studio, or SSMS for short, for creating and editing queries. 
+The tools and commands discussed in this chapter are accessed within SSMS. 
+The SSMS graphics are from the 2017 version and may vary slightly from other releases.
+
+-STATISTICS TIME in SSMS
+Throughout this course, we’ve heard terms like “increase the time it takes for a query to run.” 
+In SQL Server there are many tools and commands available to quantify and measure performance. 
+One way to measure query time is with the command STATISTICS TIME which reports the milliseconds, required to parse, compile, 
+and execute a query. In SSMS, if settings are set to Results to Grid, the statistics are displayed in the Messages tab to the right of the Results tab.
+
+-SQL Server Execution Times
+The output contains several time statistics, However, we’ll only discuss CPU time and elapsed time under the heading SQL Server Execution Times. 
+"CPU time" is the actual time taken up by the database server processors 
+to process the query and "elapsed time" is the total duration of the query from execution to returning the complete results to back to us.
+
+-Example: query 1
+Let’s look at STATISTICS TIME in action. 
+In this example, our query returns Region, Country, and Capital, where the 2017 population of a capital city is more than one million. 
+This query uses two sub-queries in a WHERE filter condition -- first, to check for the presence of the capital city in the Cities table, 
+and second, to return cities with populations of more than one million.
+
+To get the time statistics, we first need to run SET STATISTICS TIME ON before executing our query. 
+Looking at the statistics output both CPU and elapsed time are close to 400 milliseconds.
+
+-Example: query 2
+We can re-write the query and replace the two sub-queries in the WHERE filter condition with EXISTS and one sub-query. 
+Because STATISTICS TIME is already on, we do not need to rerun it.
+
+-Example: query 2
+The output shows a significant improvement in the time. The database processors spent less than one millisecond on the query and total execution time was only two milliseconds. Once we’ve completed our assessment of the time statistics, we turn it off by running SET STATISTICS TIME OFF.
+
+-Comparing queries
+When we compare our two examples, the first query was slower than the second because of the two sub-queries in the WHERE filter condition. In the first query, each sub-query must collect all the results first before further processing whereas the second query uses EXISTS which stops searching the sub-query when there is a match -- much more efficient.
+
+-Elapsed time vs. CPU time
+When analyzing query time statistics, the elapsed time may vary because it is sensitive to several factors, 
+including the load on the server and network bandwidth between the database server and a query editing application like SSMS. 
+The CPU time is less sensitive and will generally show little variation. 
+One issue with using the CPU time is when the server processors are running in parallel. 
+In this case, it is possible that the CPU time is multiplied 
+by the number of processors making it appear significantly higher than the elapsed time 
+and therefore making it less useful for query performance tuning. 
+In most cases, the desired outcome is to tune a query to return the results to us as fast as possible. 
+Therefore, the elapsed time is the best measure to use.
+
+-Taking an average
+Because of variability, particularly in the elapsed time, 
+it is good practice to execute a query multiple times and take an average of time measurements.
+
 4.2. STATISTICS TIME in queries
+A friend is writing a training course on how the command STATISTICS TIME can be used to tune query performance 
+and asks for your help to complete a presentation. He requires two queries 
+that return NBA team details where the host city had a 2017 population of more than two million.
+
+NBA team details can be queried from the NBA Season 2017-2018 database 
+and city populations can be queried by adding in tables from the Earthquakes database.
+
+Each query uses a different filter on the Teams table.
+
+Query 1: Filters the Teams table using IN and three sub-queries
+Query 2: Filters the Teams table using EXISTS
+
+Instructions 1/4
+Turn on STATISTICS TIME.
+
+SET STATISTICS TIME ON -- Turn the time command on
+
+Instructions 2/4
+For Query 1:
+Add the filter operator for each sub-query.
+Add the table from the Earthquakes database to the first query.
+
+Hint: Which table from the Earthquakes database contains city names and their 2017 populations?
+-- Query 1
+SELECT * 
+FROM Teams
+-- Sub-query 1
+WHERE City IN -- Sub-query filter operator
+      (SELECT CityName 
+       FROM Cities) -- Table from Earthquakes database
+-- Sub-query 2
+   AND City IN -- Sub-query filter operator
+	   (SELECT CityName 
+	    FROM Cities
+		WHERE CountryCode IN ('US','CA'))
+-- Sub-query 3
+    AND City IN -- Sub-query filter operator
+        (SELECT CityName 
+         FROM Cities
+	     WHERE Pop2017 >2000000);
+	     
+
+Instructions 3/4
+For Query 2:
+Add the filter operator for the sub-query.
+Add the two city name columns being compared to the sub-query.
+
+Hint: The column in the Teams table containing city names is City
+
+-- Query 2
+SELECT * 
+FROM Teams AS t
+WHERE EXISTS -- Sub-query filter operator
+	(SELECT 1 
+     FROM Cities AS c
+     WHERE t.City = c.CityName -- Columns being compared
+        AND c.CountryCode IN ('US','CA')
+          AND c.Pop2017 > 2000000);
+	  
+Instructions 4/4
+Turn off STATISTICS TIME.
+
+SET STATISTICS TIME OFF -- Turn the time command off
+
 4.3. STATISTICS TIME results
-4.4. Page read statistics
+In the previous exercise, the STATISTICS TIME command was used on two different queries. 
+The following table summarizes an analysis of the elapsed time statistics for each query.
+
+Query	Details							Average elapsed time (ms)
+1	Filters the Teams table using IN and three sub-queries	20
+2	Filters the Teams table using EXISTS			3
+
+What conclusion can you make from this summary?
+---  None. CPU time is a better measure to compare queries.
+---> The second query that uses EXISTS is more efficient.
+---  None. Elapsed time should be reported as a minimum, not an average.
+---  The database server processors must be running in parallel.
+
+Hints:
+-Generally, elapsed time is the best measure to compare query times because it reports the total duration of the query, 
+from execution to returning the complete results. 
+CPU time measures the time the database server processors spent on the query only.
+-The WHERE filter condition on the Teams table requires all three sub-queries to be processed whereas EXISTS only processes one.
+-Elapsed time will vary because it is sensitive to several factors including load on the server and network bandwidth; 
+therefore it is good practice to take an average.
+-CPU time, and not elapsed time, may indicate if server processors are running in parallel.
+
+4.4. Page read statistics - Video
 4.5. STATISTICS IO: Example 1
+Your sales company has just taken on a new regional manager for Western Europe. 
+He has asked you to provide him daily updates on orders shipped to some key Western Europe capital cities. 
+As this data is time sensitive, you want a robust query that is tuned to return the results as quickly as possible.
+
+You initially decide on a query that uses two sub-queries: 
+one in the SELECT statement to get the count of orders and one using a filter condition with an IN operator.
+
+You will turn on the STATISTICS IO command to review the page read statistics.
+
+SET STATISTICS IO ON -- Turn the IO command on
+
+Instructions 2/3
+Add the table used to count the number of orders.
+Add the filter operator for the second sub-query.
+
+-- Example 1
+SELECT CustomerID,
+       CompanyName,
+       (SELECT COUNT(*) 
+	    FROM Orders AS o -- Add table
+		WHERE c.CustomerID = o.CustomerID) CountOrders
+FROM Customers AS c
+WHERE CustomerID IN -- Add filter operator
+       (SELECT CustomerID 
+	    FROM Orders 
+		WHERE ShipCity IN
+            ('Berlin','Bern','Bruxelles','Helsinki',
+			'Lisboa','Madrid','Paris','London'));
+			
+Question
+From the STATISTICS IO output below, how many data pages from the Orders table were read from memory to complete the query?
+
+Table 'Customers'. Scan count 1, logical reads 2, physical reads 0,...
+Table 'Orders'. Scan count 2, logical reads 32, physical reads 0,...
+
+---> 22
+
 4.6. STATISTICS IO: Example 2
+In the previous exercise, you were asked you to provide a new regional manager daily updates on orders shipped to Western Europe capital cities. You initially created a query that contained two sub-queries. You decide to do a rewrite and use an INNER JOIN.
+
+The STATISTICS IO command is turned on. You will need to turn it off after completing the query.
+
+Instructions 1/3
+Add the join operator.
+Add the shipping destination city column in the filter condition.
+
+-- Example 2
+SELECT c.CustomerID,
+       c.CompanyName,
+       COUNT(o.CustomerID)
+FROM Customers AS c
+INNER JOIN Orders AS o -- Join operator
+    ON c.CustomerID = o.CustomerID
+WHERE o.ShipCity IN -- Shipping destination column
+     ('Berlin','Bern','Bruxelles','Helsinki',
+	 'Lisboa','Madrid','Paris','London')
+GROUP BY c.CustomerID,
+         c.CompanyName;
+	 
+	 
+SET STATISTICS IO OFF -- Turn the IO command off
+
+
+Instructions 3/3
+Question:
+From the STATISTICS IO output below, how many data pages from the Orders table were read from memory to complete the query?
+
+Table 'Customers'. Scan count 1, logical reads 2, physical reads 0,...
+Table 'Orders'. Scan count 2, logical reads 16, physical reads 0,...
+---> 16
+
+
 4.7. STATISTICS IO comparison
-4.8. Indexes
+Using the STATISTICS IO outputs from the example queries in the previous two exercises, what might you conclude?
+
+Example 1
+Table 'Customers'. Scan count 1, logical reads 2, physical reads 0,....
+Table 'Orders'. Scan count 2, logical reads 32, physical reads 0,...
+
+Example 2
+Table 'Customers'. Scan count 1, logical reads 2, physical reads 0,....
+Table 'Orders'. Scan count 2, logical reads 16, physical reads 0,...
+
+---> The Example 2 query will run faster than the Example 1 query.
+Logical reads are a measure of the number of the 8-kilobyte pages read from memory to process and return the results of your query. 
+In general, the more pages that need to be read the slower your query will run.
+
+4.8. Indexes - Video
 4.9. Test your knowledge of indexes
+Which of the following statements about indexes is FALSE?
+---  Clustered and nonclustered indexes are applied to table columns.
+---  Indexes are used to locate data quickly without having to scan the entire table.
+---> Clustered and nonclustered indexes are applied to table rows.
+---  A dictionary is a good analogy for a clustered index.
+
+Hints: 
+A query that uses an index on a table will go directly to the data pages that meet a filter condition, 
+and An entire table will be scanned if it does not have an index.
+
+
 4.10. Clustered index
-4.11. Execution plans
+Clustered indexes can be added to tables to speed up search operations in queries. 
+You have two copies of the Cities table from the Earthquakes database: one copy has a clustered index on the CountryCode column. 
+The other is not indexed.
+
+You have a query on each table with a different filter condition:
+
+Query 1: Returns all rows where the country is either Russia or China.
+Query 2: Returns all rows where the country is either Jamaica or New Zealand.
+
+Instructions 1/3
+Add the two country codes to the filter condition for Query 1.
+
+Hint:
+The country code for Russia is RU.
+Use this example query to find a two digit country code from the Nations table; 
+SELECT Code2 
+FROM Nations
+WHERE CountryName = 'Russia'
+
+-- Query 1
+SELECT *
+FROM Cities
+WHERE CountryCode = 'RU'  -- Country code
+		OR CountryCode = 'CN'  -- Country code
+		
+-- Query 2
+SELECT *
+FROM Cities
+WHERE CountryCode IN ('JM','NZ')  -- Country codes
+
+Instructions 3/3
+Question: For these two queries, what conclusion could you make using the following output from the STATISTICS IO command?
+
+Query 1
+4694 results returned
+Table 'Cities'. ..., logical reads 274, ... ,
+
+Query 2
+212 results returned
+Table 'Cities'. ..., logical reads 10, ... ,
+
+---> Query 2 accesses a clustered index because logical reads indicates fewer data pages were accessed compared to Query 1
+A clustered index will reduce the number of logical reads because the index will direct the query to the table data pages 
+that meet the filter condition. Without a clustered index, all pages are scanned.
+
+A query that does not access a clustered index will make the same number of logical reads regardless of how many rows are returned.
+A query that does not access a clustered index will make the same number of logical reads regardless of the filter condition.
+A query that is accessing a clustered index will likely have fewer logical reads than one that is not regardless of how many rows are returned.
+
+4.11. Execution plans - Video
 4.12. Sort operator in execution plans
+Execution plans can tell us if and where a query used an internal sorting operation. 
+Internal sorting is often required when using an operator in a query that checks for and removes duplicate rows.
+
+You are given an execution plan of a query that returns all cities listed in the Earthquakes database. 
+The query appends queries from the Nations and Cities tables. 
+Use the following execution plan to determine if the appending operator used is UNION or UNION ALL
+
+Instructions
+Add the operator that the execution plan indicates was used to append the queries.
+
+Hint: Apart from two Table Scans, what other operators does the execution plan show was used?
+
+SELECT CityName AS NearCityName,
+	   CountryCode
+FROM Cities
+
+UNION -- Append queries
+
+SELECT Capital AS NearCityName,
+       Code2 AS CountryCode
+FROM Nations;
+
+
 4.13. Test your knowledge of execution plans
+Which one of the following is NOT information you can get from an execution plan in SQL Server?
+---  If the query used a table with an index
+---> The total duration of the query, in milliseconds, from execution to returning the complete results
+---  The location and relative costs of sorting operations
+---  The types of joins used
+
+Hints:
+-Execution plans can indicate if a query used an index on a table.
+-An execution plan does not provide information about the total duration a query takes to complete. 
+You can, however, get this information from other SQL query performance tuning tools and commands, such as STATISTICS TIME.
+-Execution plans can indicate if and where sort operations are used and their relative costs.
+-Execution plans can indicate if and where join operations are used and the type of join.
+
 4.14. Query performance tuning: final notes
+1. Query performance tuning: final notes
+We'll complete this chapter with some final notes on tools and commands that are available with SQL Server to help analyze and tune query performance.
+
+2. Final notes
+In SQL Server time statistics are commonly reported in milliseconds. In the examples and exercises presented in this chapter, 
+we compared queries and said that based on the differences in time one would likely run slower or faster than the other. 
+In reality, the time differences reported in the examples and exercises would be unnoticeable. 
+In the real world, it would not be uncommon to work with large complex queries that run for ten minutes, one hour or more. 
+This is where utilizing time statistics for query tuning performance is invaluable.
+
+3. Final notes
+This chapter provided a brief overview of query statistics, indexes, and execution plans. 
+All of these are advanced topics with many entire books and websites devoted to each of these and other query performance tuning tools and commands. 
+The use of SQL Server tools and commands discussed in this chapter may require elevated levels of database permissions. 
+We recommend communicating with your database administrator about your requirements before starting a project that may require analyzing query performance. 
+When trying to tune query performance with any of the tools and commands available in SQL Server, don’t just rely on one. 
+Each one can provide a different insight, and often they complement one another.
+
