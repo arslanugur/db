@@ -440,19 +440,270 @@ Investigate the differences between stored procedures and user defined functions
 
 3.1. Stored procedures
 3.2. CREATE PROCEDURE with OUTPUT
-3.3. Output parameters vs. Return values
-3.4. Oh CRUD!
-3.5. Use SP to INSERT
-3.6. Use SP to UPDATE
-3.7. Use SP to DELETE
-3.8. Let's EXEC!
-3.9. EXECUTE with OUTPUT parameter
-3.10. EXECUTE with return value
-3.11. EXECUTE with OUTPUT & return value
-3.12. TRY & CATCH those errors!
-3.13. Your very own TRY..CATCH
-3.14. CATCH an error
+Create a Stored Procedure named cuspSumRideHrsSingleDay in the dbo schema 
+that accepts a date and returns the total ride hours for the date passed.
 
+Instructions
+Create a stored procedure called cuspSumRideHrsSingleDay in the dbo schema.
+Declare @DateParm as the input parameter and @RideHrsOut as the output parameter.
+Don't send the row count to the caller.
+Assign the query result to @RideHrsOut and include the RETURN keyword.
+
+-- Create the stored procedure
+CREATE PROCEDURE dbo.cuspSumRideHrsSingleDay
+    -- Declare the input parameter
+	@DateParm date,
+    -- Declare the output parameter
+	@RideHrsOut numeric OUTPUT
+AS
+-- Don't send the row count 
+SET NOCOUNT ON
+BEGIN
+-- Assign the query result to @RideHrsOut
+SELECT
+	@RideHrsOut = SUM(DATEDIFF(second, StartDate, EndDate))/3600
+FROM CapitalBikeShare
+-- Cast StartDate as date and compare with @DateParm
+WHERE CAST(StartDate AS date) = @DateParm
+RETURN
+END
+
+
+3.3. Output parameters vs. Return values
+Select the statement that is FALSE when comparing output parameters and return values.
+
+---> Output parameters should be used to communicate errors to the calling application.
+---  You can define multiple output parameters but only one return value.
+---  Return values can only return integer data types.
+---  Output parameters can't be table valued data types.
+
+3.4. Oh CRUD! - Video
+3.5. Use SP to INSERT
+Create a stored procedure named cusp_RideSummaryCreate in the dbo schema that will insert a record into the RideSummary table.
+
+Instructions
+Define two input parameters named @DateParm and @RideHrsParm.
+Insert @DateParm and @RideHrsParm into the Date and RideHours columns of the RideSummary table.
+Select the record that was just inserted where the Date is equal to @DateParm.
+
+-- Create the stored procedure
+CREATE PROCEDURE dbo.cusp_RideSummaryCreate 
+    (@DateParm date, @RideHrsParm numeric)
+AS
+BEGIN
+SET NOCOUNT ON
+-- Insert into the Date and RideHours columns
+INSERT INTO dbo.RideSummary(Date, RideHours)
+-- Use values of @DateParm and @RideHrsParm
+VALUES(@DateParm, @RideHrsParm) 
+
+-- Select the record that was just inserted
+SELECT
+    -- Select Date column
+	Date,
+    -- Select RideHours column
+    RideHours
+FROM dbo.RideSummary
+-- Check whether Date equals @DateParm
+WHERE Date = @DateParm
+END;
+
+
+3.6. Use SP to UPDATE
+Create a stored procedure named cuspRideSummaryUpdate in the dbo schema that will update an existing record in the RideSummary table.
+
+Instructions
+The SP should accept input parameters for each RideSummary column and be named @Date and @RideHrs.
+Make @Date parameter a date data type and @RideHrs a numeric data type.
+Use UPDATE and SET keywords to assign the parameter values to the RideSummary record where the @Date matches the Date value.
+
+-- Create the stored procedure
+CREATE PROCEDURE dbo.cuspRideSummaryUpdate
+	-- Specify @Date input parameter
+	(@Date date,
+     -- Specify @RideHrs input parameter
+     @RideHrs numeric(18,0))
+AS
+BEGIN
+SET NOCOUNT ON
+-- Update RideSummary
+UPDATE RideSummary
+-- Set
+SET
+	Date = @Date,
+    RideHours = @RideHrs
+-- Include records where Date equals @Date
+WHERE Date = @Date
+END;
+
+
+3.7. Use SP to DELETE
+Create a stored procedure named cuspRideSummaryDelete in the dbo schema 
+that will delete an existing record in the RideSummary table and RETURN the number of rows affected via output parameter.
+
+Instructions
+Create a stored procedure called cuspRideSummaryDelete 
+that accepts @DateParm as an input parameter and has an integer output parameter named @RowCountOut.
+Delete the record(s) in the RideSummary table that have the same Date value as @DateParm.
+Set @RowCountOut to @@ROWCOUNT to return the number of rows affected by the statement.
+
+-- Create the stored procedure
+CREATE PROCEDURE dbo.cuspRideSummaryDelete
+	-- Specify @DateParm input parameter
+	(@DateParm date,
+     -- Specify @RowCountOut output parameter
+     @RowCountOut int OUTPUT)
+AS
+BEGIN
+-- Delete record(s) where Date equals @DateParm
+DELETE FROM dbo.RideSummary
+WHERE Date = @DateParm
+-- Set @RowCountOut to @@ROWCOUNT
+SET @RowCountOut = @@ROWCOUNT
+END;
+
+
+3.8. Let's EXEC! - Video
+3.9. EXECUTE with OUTPUT parameter
+Execute the dbo.cuspSumRideHrsSingleDay stored procedure and capture the output parameter.
+
+Instructions
+Declare @RideHrs as a numeric output parameter.
+Execute dbo.cuspSumRideHrsSingleDay and pass '3/1/2018' as the @DateParm input parameter.
+Store the output parameter value in @RideHrs.
+Select @RideHrs to show the output parameter value of the SP.
+
+-- Create @RideHrs
+DECLARE @RideHrs AS numeric(18,0)
+-- Execute the stored procedure
+EXEC dbo.cuspSumRideHrsSingleDay
+    -- Pass the input parameter
+	@DateParm = '3/1/2018',
+    -- Store the output in @RideHrs
+	@RideHrsOut = @RideHrs OUTPUT
+-- Select @RideHrs
+SELECT @RideHrs AS RideHours
+
+
+3.10. EXECUTE with return value
+Execute dbo.cuspRideSummaryUpdate to change the RideHours to 300 for '3/1/2018'. Store the return code from the stored procedure.
+
+Instructions
+Declare @ReturnStatus as an integer and assign its value to the result of dbo.cuspRideSummaryUpdate.
+Execute the stored procedure, setting @DateParm to '3/1/2018' and @RideHrs to 300.
+Select the @ReturnStatus to see its value as well as the '3/1/2018' record from RideSummary to see the impact of the SP update.
+
+-- Create @ReturnStatus
+DECLARE @ReturnStatus AS int
+-- Execute the SP
+EXEC @ReturnStatus = dbo.cuspRideSummaryUpdate
+    -- Specify @DateParm
+	@DateParm = '3/1/2018',
+    -- Specify @RideHrs
+	@RideHrs = 300
+
+-- Select the columns of interest
+SELECT
+	@ReturnStatus AS ReturnStatus,
+    Date,
+    RideHours
+FROM dbo.RideSummary 
+WHERE Date = '3/1/2018';
+
+
+3.11. EXECUTE with OUTPUT & return value
+Store and display both the output parameter and return code when executing dbo.cuspRideSummaryDelete SP.
+
+Instructions
+Create integer variables named @ReturnStatus and @RowCount.
+Pass '3/1/2018' as the @DateParm value and execute dbo.cuspRideSummaryDelete SP.
+Select @ReturnStatus and @RowCount to understand the impact of the SP.
+
+-- Create @ReturnStatus
+DECLARE @ReturnStatus AS int
+-- Create @RowCount
+DECLARE @RowCount AS int
+
+-- Execute the SP, storing the result in @ReturnStatus
+EXEC @ReturnStatus = dbo.cuspRideSummaryDelete 
+    -- Specify @DateParm
+	@DateParm = '3/1/2018',
+    -- Specify RowCountOut
+	@RowCountOut = @RowCount OUTPUT
+
+-- Select the columns of interest
+SELECT
+	@ReturnStatus AS ReturnStatus,
+    @RowCount as 'RowCount';
+    
+    
+
+3.12. TRY & CATCH those errors! - Video
+3.13. Your very own TRY..CATCH
+Alter dbo.cuspRideSummaryDelete to include an intentional error so we can see how the TRY CATCH block works.
+
+Instructions
+Incorrectly assign @DateParm a nvarchar(30) data type instead of a date.
+Include @Error as an optional OUTPUT parameter.
+Include the DELETE statement within the BEGIN TRY...END TRY block.
+Concatenate the ERROR_NUMBER(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_MESSAGE(), ERROR_LINE() within the BEGIN CATCH...END CATCH block and SET to @Error.
+
+-- Alter the stored procedure
+CREATE OR ALTER PROCEDURE dbo.cuspRideSummaryDelete
+	-- Specify @DateParm
+	@DateParm nvarchar(30),
+    -- Specify @Error
+	@Error nvarchar(max) = NULL OUTPUT
+AS
+SET NOCOUNT ON
+BEGIN
+  -- Start of the TRY block
+  BEGIN TRY
+  	  -- Delete
+      DELETE FROM RideSummary
+      WHERE Date = @DateParm
+  -- End of the TRY block
+  END TRY
+  -- Start of the CATCH block
+  BEGIN CATCH
+		SET @Error = 
+		'Error_Number: '+ CAST(ERROR_NUMBER() AS VARCHAR) +
+		'Error_Severity: '+ CAST(ERROR_SEVERITY() AS VARCHAR) +
+		'Error_State: ' + CAST(ERROR_STATE() AS VARCHAR) + 
+		'Error_Message: ' + ERROR_MESSAGE() + 
+		'Error_Line: ' + CAST(ERROR_LINE() AS VARCHAR)
+  -- End of the CATCH block
+  END CATCH
+END;
+
+
+3.14. CATCH an error
+Execute dbo.cuspRideSummaryDelete and pass an invalid @DateParm value of '1/32/2018' to see how the error is handled. 
+The invalid date will be accepted by the nvarchar data type of @DateParm, 
+but the error will occur when SQL attempts to convert it to a valid date when executing the stored procedure.
+
+Instructions
+DECLARE variable @ReturnCode as an integer and @ErrorOut as a nvarchar(max).
+Execute dbo.cuspRideSummaryDelete and pass '1/32/2018' as the @DateParm value.
+Assign @ErrorOut to the @Error parameter.
+Select both @ReturnCode and @ErrorOut to see their values.
+
+-- Create @ReturnCode
+DECLARE @ReturnCode int
+-- Create @ErrorOut
+DECLARE @ErrorOut nvarchar(max)
+-- Execute the SP, storing the result in @ReturnCode
+EXECUTE @ReturnCode = dbo.cuspRideSummaryDelete
+    -- Specify @DateParm
+	@DateParm = '1/32/2018',
+    -- Assign @ErrorOut to @Error
+	@Error = @ErrorOut OUTPUT
+-- Select @ReturnCode and @ErrorOut
+SELECT
+	@ReturnCode AS ReturnCode,
+    @ErrorOut AS ErrorMessage;
+    
+    
 
 4. NYC Taxi Ride Case Study
 Apply your new skills in temporal EDA, user-defined functions, and stored procedures to solve a business case problem. 
@@ -460,22 +711,382 @@ Analyze the New York City taxi ride dataset to identify average fare per distanc
 and total ride time for each borough on each day of the week. 
 And which pickup locations within the borough should be scheduled for each driver shift?
 
-4.1. Case study EDA & imputation
+4.1. Case study EDA & imputation - Video
 4.2. Use EDA to find impossible scenarios
+Calculate how many YellowTripData records have each type of error discovered during EDA.
+
+Instructions
+Use CASE and COUNT to understand how many records contain the following errors:
+DropOffDate before PickupDate, DropOffDate before today, PickupDate before today, TripDistance is zero.
+
+SELECT
+	-- PickupDate is after today
+	COUNT (CASE WHEN PickupDate > GetDate() THEN 1 END) AS 'FuturePickup',
+    -- DropOffDate is after today
+	COUNT (CASE WHEN DropOffDate > GetDate() THEN 1 END) AS 'FutureDropOff',
+    -- PickupDate is after DropOffDate
+	COUNT (CASE WHEN PickupDate > DropOffDate THEN 1 END) AS 'PickupBeforeDropoff',
+    -- TripDistance is 0
+	COUNT (CASE WHEN TripDistance = 0 THEN 1 END) AS 'ZeroTripDistance'  
+FROM YellowTripData;
+
 4.3. SPs vs UDFs
+In order to handle errors discovered in EDA we need to understand the differences between UDFs and SPs. 
+Select the statement that is true when comparing UDFs and SPs.
+---> SPs perform error handling better than UDFS.
+
 4.4. Mean imputation
+Create a stored procedure that will apply mean imputation to the YellowTripData records with an incorrect TripDistance of zero. 
+The average trip distance variable should have a precision of 18 and 4 decimal places.
+
+Instructions
+Create a stored procedure named cuspImputeTripDistanceMean
+Create a numeric variable: @AvgTripDistance.
+Compute the average TripDistance for all records where TripDistance is greater than 0.
+Update the records in YellowTripData where TripDistance is 0 and set to @AvgTripDistance.
+
+-- Create the stored procedure
+CREATE PROCEDURE dbo.cuspImputeTripDistanceMean
+AS
+BEGIN
+-- Specify @AvgTripDistance variable
+DECLARE @AvgTripDistance AS numeric (18,4)
+
+-- Calculate the average trip distance
+SELECT @AvgTripDistance = AVG(TripDistance) 
+FROM YellowTripData
+-- Only include trip distances greater than 0
+WHERE TripDistance > 0
+
+-- Update the records where trip distance is 0
+UPDATE YellowTripData
+SET TripDistance =  @AvgTripDistance
+WHERE TripDistance = 0
+END;
+
+
 4.5. Hot Deck imputation
-4.6. Case study UDFs
+Create a function named dbo.GetTripDistanceHotDeck that returns a TripDistance value via Hot Deck methodology. 
+TripDistance should have a precision of 18 and 4 decimal places.
+
+Instructions
+Create a function named dbo.GetTripDistanceHotDeck() that returns a numeric data type.
+Select the first TripDistance value from YellowTripData sample of 1000 records.
+The sample of 1000 records should only include those where TripDistance is more than zero.
+
+-- Create the function
+CREATE FUNCTION dbo.GetTripDistanceHotDeck()
+-- Specify return data type
+RETURNS numeric(18,4)
+AS 
+BEGIN
+RETURN
+	-- Select the first TripDistance value
+	(SELECT TOP 1 TripDistance
+	FROM YellowTripData
+    -- Sample 1000 records
+	TABLESAMPLE(1000 rows)
+    -- Only include records where TripDistance is > 0
+	WHERE TripDistance > 0)
+END;
+
+4.6. Case study UDFs - Video
 4.7. CREATE FUNCTIONs
+Create three functions to help solve the business case:
+Convert distance from miles to kilometers.
+Convert currency based on exchange rate parameter.
+(These two functions should return a numeric value with precision of 18 and 2 decimal places.)
+Identify the driver shift based on the hour parameter value passed.
+
+Instructions 1/3
+Use CREATE FUNCTION to accept @Miles input parameter & return the distance converted to kilometers.Instructions 1/3
+Use CREATE FUNCTION to accept @Miles input parameter & return the distance converted to kilometers.
+
+-- Create the function
+CREATE FUNCTION dbo.ConvertMileToKm (@Miles numeric(18,2))
+-- Specify return data type
+RETURNS numeric(18,2)
+AS
+BEGIN
+RETURN
+	-- Convert Miles to Kilometers
+	(SELECT @Miles * 1.609)
+END;
+
+Instructions 2/3
+Create a function which accepts @DollarAmt and @ExchangeRate input parameters, multiplies them, and returns the result.
+
+-- Create the function
+CREATE FUNCTION dbo.ConvertDollar
+	-- Specify @DollarAmt parameter
+	(@DollarAmt numeric(18,2),
+     -- Specify @ExchangeRate parameter
+     @ExchangeRate numeric(18,2))
+-- Specify return data type
+RETURNS numeric(18,2)
+AS
+BEGIN
+RETURN
+	-- Multiply @ExchangeRate and @DollarAmt
+	(SELECT @ExchangeRate * @DollarAmt)
+END;
+
+Instructions 3/3
+Create a function that returns the shift as an integer: 1st shift is 12am to 9am, 2nd is 9am to 5pm, 3rd is 5pm to 12am.
+
+-- Create the function
+CREATE FUNCTION dbo.GetShiftNumber (@Hour integer)
+-- Specify return data type
+RETURNS int
+AS
+BEGIN
+RETURN
+	-- 12am (0) to 9am (9) shift
+	(CASE WHEN @Hour >= 0 AND @Hour < 9 THEN 1
+     	  -- 9am (9) to 5pm (17) shift
+		  WHEN @Hour >= 9 AND @Hour < 17 THEN 2
+          -- 5pm (17) to 12am (24) shift
+	      WHEN @Hour >= 17 AND @Hour < 24 THEN 3 END)
+END;
+
+
 4.8. Test FUNCTIONs
-4.9. Formatting tools
+Now it's time to test the three functions you wrote in the previous exercise.
+
+Instructions
+Display the first 100 records of PickupDate, TripDistance and FareAmount from YellowTripData.
+Determine the shift value of PickupDate by passing the hour value to dbo.GetShiftNumber function; 
+display the shift and include it in the WHERE clause for shifts = 2 only.
+Convert TripDistance to kilometers with dbo.ConvertMiletoKm function.
+Convert FareAmount to Euro (with exchange rate of 0.87) with the dbo.ConvertDollar function.
+
+SELECT
+	-- Select the first 100 records of PickupDate
+	TOP 100 PickupDate,
+    -- Determine the shift value of PickupDate
+	dbo.GetShiftNumber(DATEPART(hour, PickupDate)) AS 'Shift',
+    -- Select FareAmount
+	FareAmount,
+    -- Convert FareAmount to Euro
+	dbo.ConvertDollar(FareAmount, 0.87) AS 'FareinEuro',
+    -- Select TripDistance
+	TripDistance,
+    -- Convert TripDistance to kilometers
+	dbo.ConvertMileToKm(TripDistance) AS 'TripDistanceinKM'
+FROM YellowTripData
+-- Only include records for the 2nd shift
+WHERE dbo.GetShiftNumber(DATEPART(hour, PickupDate)) = 2;
+
+
+
+4.9. Formatting tools - Video
 4.10. Logical weekdays with Hot Deck
+Calculate Total Fare Amount per Total Distance for each day of week. 
+If the TripDistance is zero use the Hot Deck imputation function you created earlier in the chapter.
+
+Instructions
+Use DATENAME() and PickupDate to select the day of week.
+Use AVG() to calculate TotalAmount per TripDistance, and a CASE statement to select TripDistance if it's more than 0. 
+If not, use dbo.GetTripDistanceHotDeck().
+Order by the PickupDate day of week, with 'Monday' appearing first.
+
+SELECT
+    -- Select the pickup day of week
+	DATENAME(weekday, PickupDate) as DayofWeek,
+    -- Calculate TotalAmount per TripDistance
+	CAST(AVG(TotalAmount/
+            -- Select TripDistance if it's more than 0
+			CASE WHEN TripDistance > 0 THEN TripDistance
+                 -- Use GetTripDistanceHotDeck()
+     			 ELSE dbo.GetTripDistanceHotDeck() END) as decimal(10,2)) as 'AvgFare'
+FROM YellowTripData
+GROUP BY DATENAME(weekday, PickupDate)
+-- Order by the PickupDate day of week
+ORDER BY
+     CASE WHEN DATENAME(weekday, PickupDate) = 'Monday' THEN 1
+          WHEN DATENAME(weekday, PickupDate) = 'Tuesday' THEN 2
+          WHEN DATENAME(weekday, PickupDate) = 'Wednesday' THEN 3
+          WHEN DATENAME(weekday, PickupDate) = 'Thursday' THEN 4
+          WHEN DATENAME(weekday, PickupDate) = 'Friday' THEN 5
+          WHEN DATENAME(weekday, PickupDate) = 'Saturday' THEN 6
+          WHEN DATENAME(weekday, PickupDate) = 'Sunday' THEN 7
+END ASC;
+
+
+
 4.11. Format for Germany
-4.12. Case study stored procedures
+Write a query to display the TotalDistance, TotalRideTime and TotalFare for each day and NYC Borough. 
+Display the date, distance, ride time, and fare totals for German culture.
+
+Instructions
+Cast PickupDate as a date and display it as a German date.
+Display TotalDistance and TotalRideTime in the German format ('n' format type parameter).
+Display Total Fare as German currency ('c' format type parameter).
+
+SELECT
+    -- Cast PickupDate as a date and display as a German date
+	FORMAT(CAST(PickupDate AS Date), 'd', 'de-de') AS 'PickupDate',
+	Zone.Borough,
+    -- Display TotalDistance in the German format
+	FORMAT(SUM(TripDistance), 'n', 'de-de') AS 'TotalDistance',
+    -- Display TotalRideTime in the German format
+	FORMAT(SUM(DATEDIFF(minute, PickupDate, DropoffDate)), 'n', 'de-de') AS 'TotalRideTime',
+    -- Display TotalFare in German currency
+	FORMAT(SUM(TotalAmount), 'c', 'de-de') AS 'TotalFare'
+FROM YellowTripData
+INNER JOIN TaxiZoneLookup AS Zone 
+ON PULocationID = Zone.LocationID 
+GROUP BY
+	CAST(PickupDate as date),
+    Zone.Borough 
+ORDER BY
+	CAST(PickupDate as date),
+    Zone.Borough;
+    
+    
+
+4.12. Case study stored procedures - Video
 4.13. NYC Borough statistics SP
+It's time to apply what that u have learned in this course and write a stored procedure to solve the first objective of the Taxi Ride business case. 
+Calculate AvgFarePerKM, RideCount and TotalRideMin for each NYC borough and weekday. 
+After discussion with stakeholders, you should omit records where the TripDistance is zero.
+
+Instructions
+Select and group by pickup weekday and Borough.
+Calculate AvgFarePerKM with dbo.ConvertDollar() and dbo.ConvertMiletoKM() utilizing .88 exchange rate to the Euro.
+Display AvgFarePerKM as German currency, RideCount and TotalRideMin as German numbers.
+Omit records where TripDistance is 0
+
+CREATE OR ALTER PROCEDURE dbo.cuspBoroughRideStats
+AS
+BEGIN
+SELECT
+    -- Calculate the pickup weekday
+	DATENAME(weekday, PickupDate) AS 'Weekday',
+    -- Select the Borough
+	Zone.Borough AS 'PickupBorough',
+    -- Display AvgFarePerKM as German currency
+	FORMAT(AVG(dbo.ConvertDollar(TotalAmount, .88)/dbo.ConvertMiletoKM(TripDistance)), 'c', 'de-de') AS 'AvgFarePerKM',
+    -- Display RideCount in the German format
+	FORMAT(COUNT (ID), 'n', 'de-de') AS 'RideCount',
+    -- Display TotalRideMin in the German format
+	FORMAT(SUM(DATEDIFF(SECOND, PickupDate, DropOffDate))/60, 'n', 'de-de') AS 'TotalRideMin'
+FROM YellowTripData
+INNER JOIN TaxiZoneLookup AS Zone 
+ON PULocationID = Zone.LocationID
+-- Only include records where TripDistance is greater than 0
+WHERE TripDistance > 0
+-- Group by pickup weekday and Borough
+GROUP BY DATENAME(WEEKDAY, PickupDate), Zone.Borough
+ORDER BY CASE WHEN DATENAME(WEEKDAY, PickupDate) = 'Monday' THEN 1
+	     	  WHEN DATENAME(WEEKDAY, PickupDate) = 'Tuesday' THEN 2
+              WHEN DATENAME(WEEKDAY, PickupDate) = 'Wednesday' THEN 3
+              WHEN DATENAME(WEEKDAY, PickupDate) = 'Thursday' THEN 4
+              WHEN DATENAME(WEEKDAY, PickupDate) = 'Friday' THEN 5
+              WHEN DATENAME(WEEKDAY, PickupDate) = 'Saturday' THEN 6
+              WHEN DATENAME(WEEKDAY, PickupDate) = 'Sunday' THEN 7 END,  
+		 SUM(DATEDIFF(SECOND, PickupDate, DropOffDate))/60
+DESC
+END;
+
+
 4.14. NYC Borough statistics results
+Let's see the results of the dbo.cuspBoroughRideStats stored procedure you just created.
+
+Instructions
+Declare @SPResults as a TABLE with the following columns of nvarchar (30) data types; 
+Weekday, Borough, AvgFarePerKM, RideCount and TotalRideMin.
+Execute dbo.cuspBoroughRideStats and insert the results into @SPResults.
+Select all the records from @SPresults.
+
+-- Create SPResults
+DECLARE @SPResults TABLE(
+  	-- Create Weekday
+	Weekday 		nvarchar(30),
+    -- Create Borough
+	Borough 		nvarchar(30),
+    -- Create AvgFarePerKM
+	AvgFarePerKM 	nvarchar(30),
+    -- Create RideCount
+	RideCount		nvarchar(30),
+    -- Create TotalRideMin
+	TotalRideMin	nvarchar(30))
+
+-- Insert the results into @SPResults
+INSERT INTO @SPResults
+-- Execute the SP
+EXEC dbo.cuspBoroughRideStats
+
+-- Select all the records from @SPresults 
+SELECT * 
+FROM @SPResults;
+
+
 4.15. Pickup locations by shift
+It's time to solve the second objective of the business case. 
+What are the AvgFarePerKM, RideCount and TotalRideMin for each pickup location and shift within a NYC Borough?
+
+Instructions
+Create a stored procedure named cuspPickupZoneShiftStats 
+that accepts @Borough nvarchar(30) as an input parameter and limits records with the matching Borough value.
+Calculate the 'Shift' by passing the hour of the PickupDate to the dbo.GetShiftNumber() function. 
+Use the DATEPART function to select only the hour portion of the PickupDate.
+Group by PickupDate weekday, shift, and Zone.
+Sort by PickupDate weekday (with Monday first), shift, and TotalRideMin.
+
+-- Create the stored procedure
+CREATE PROCEDURE dbo.cuspPickupZoneShiftStats
+	-- Specify @Borough parameter
+	@Borough nvarchar(30)
+AS
+BEGIN
+SELECT
+	DATENAME(WEEKDAY, PickupDate) as 'Weekday',
+    -- Calculate the shift number
+	dbo.GetShiftNumber(DATEPART(hour, PickupDate)) as 'Shift',
+	Zone.Zone as 'Zone',
+	FORMAT(AVG(dbo.ConvertDollar(TotalAmount, .77)/dbo.ConvertMiletoKM(TripDistance)), 'c', 'de-de') AS 'AvgFarePerKM',
+	FORMAT(COUNT (ID),'n', 'de-de') as 'RideCount',
+	FORMAT(SUM(DATEDIFF(SECOND, PickupDate, DropOffDate))/60, 'n', 'de-de') as 'TotalRideMin'
+FROM YellowTripData
+INNER JOIN TaxiZoneLookup as Zone on PULocationID = Zone.LocationID 
+WHERE
+	dbo.ConvertMiletoKM(TripDistance) > 0 AND
+	Zone.Borough = @Borough
+GROUP BY
+	DATENAME(WEEKDAY, PickupDate),
+    -- Group by shift
+	dbo.GetShiftNumber(DATEPART(hour, PickupDate)),  
+	Zone.Zone
+ORDER BY CASE WHEN DATENAME(WEEKDAY, PickupDate) = 'Monday' THEN 1
+              WHEN DATENAME(WEEKDAY, PickupDate) = 'Tuesday' THEN 2
+              WHEN DATENAME(WEEKDAY, PickupDate) = 'Wednesday' THEN 3
+              WHEN DATENAME(WEEKDAY, PickupDate) = 'Thursday' THEN 4
+              WHEN DATENAME(WEEKDAY, PickupDate) = 'Friday' THEN 5
+              WHEN DATENAME(WEEKDAY, PickupDate) = 'Saturday' THEN 6
+              WHEN DATENAME(WEEKDAY, PickupDate) = 'Sunday' THEN 7 END,
+         -- Order by shift
+         dbo.GetShiftNumber(DATEPART(hour, PickupDate)),
+         SUM(DATEDIFF(SECOND, PickupDate, DropOffDate))/60 DESC
+END;
+
+
 4.16. Pickup locations by shift results
-4.17. Congratulations!
+Let's see the AvgFarePerKM,RideCount and TotalRideMin for the pickup locations within Manhattan 
+						during the different driver shifts of each weekday.
+
+Instructions
+Declare @Borough as a nvarchar(30) variable and set it to 'Manhattan'.
+Pass @Borough to execute the dbo.cuspPickupZoneShiftStats stored procedure.
+
+-- Create @Borough
+DECLARE @Borough as nvarchar(30) = 'Manhattan'
+-- Execute the SP
+EXEC dbo.cuspPickupZoneShiftStats
+    -- Pass @Borough
+	@Borough = @Borough;
+	
+
+4.17. Congratulations! - Video
 
 
