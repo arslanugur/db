@@ -297,60 +297,825 @@ This chapter introduces filtering with WHERE and HAVING and some best practices 
 Next, it explains the methods used to interrogate data and the effects these may have on performance. 
 Finally, the chapter goes over the roles of DISTINCT() and UNION in removing duplicates and their potential effects on performance.
 
-2.1. Filtering with WHERE
+2.1. Filtering with WHERE - Video
 2.2. Column does not exist
+When using WHERE as a filter condition, it is important to think about the processing order in the query. 
+In this exercise, you want a query that returns NBA players with average total rebounds of 12 or more per game. 
+The following formula calculates average total rebounds from the PlayerStats table;
+
+AverageTotalRebounds = (DefenseiveRebounds + OffensiveRebounds) / GamesPlayed)
+
+The first query in Step 1 returns an error. Select Run Code to view the error. 
+The second query, in Step 2, will give you the results you want, without error, by using a sub-query.
+
+Note that GamesPlayed is CAST AS numeric to ensure we get decimal points in our output, as opposed to whole numbers.
+
+Instructions 1/2
+Try to understand what the error is telling you when you run the first query, then comment out the query block on lines 2 and 9.
+-- First query
+/*
+SELECT PlayerName, 
+    Team, 
+    Position,
+    (DRebound+ORebound)/CAST(GamesPlayed AS numeric) AS AvgRebounds
+FROM PlayerStats
+WHERE AvgRebounds >= 12;
+*/
+
+Instructions 2/2
+In the sub-query calculate average total rebounds in a new column, AvgRebounds.
+Add the new column to the SELECT statement.
+Apply a filter condition for 12 or more average total rebounds.
+
+-- Second query
+-- Add the new column to the select statement
+SELECT PlayerName, 
+       Team, 
+       Position, 
+       AvgRebounds -- Add the new column
+FROM
+     -- Sub-query starts here                             
+	(SELECT 
+      PlayerName, 
+      Team, 
+      Position,
+      -- Calculate average total rebounds
+     (ORebound+DRebound)/CAST(GamesPlayed AS numeric) AS AvgRebounds
+	 FROM PlayerStats) tr
+WHERE AvgRebounds >= 12; -- Filter rows
+
+Hint: The columns to sum for Offensive Rebounds and Defensive Rebounds are ORebound and DRebound respectively.
+
 2.3. Functions in WHERE
+You want to know which players from the 2017-2018 NBA season went to college in Louisiana. 
+You ask a friend to make the query for you. 
+It looks like he overcomplicated the WHERE filter condition by unnecessarily applying string functions and, 
+also, it does not give you precisely what you want because he forgot how to spell Louisiana. 
+You will simplify his query to return exactly what you require.
+
+Instructions
+Select Run Code to see what your friend's query returns.
+Think about why his query is not giving you exactly what you require then comment out his filter on line 7.
+Add a new wildcard filter condition - Louisiana%
+
+Hint: The WHERE filter condition is applied to the College column.
+
+SELECT PlayerName, 
+      Country, 
+      College, 
+      DraftYear, 
+      DraftNumber 
+FROM Players
+-- WHERE UPPER(LEFT(College,5)) LIKE 'LOU%'
+WHERE College LIKE 'Louisiana%'; -- Add the wildcard filter
+
+
 2.4. Test your knowledge of WHERE
-2.5. Filtering with HAVING
+Which of the following statements regarding WHERE is FALSE?
+---  Applying functions to columns in the WHERE filter condition could increase query times.
+---> WHERE is processed before SELECT and FROM.
+---  Calculations on columns in the WHERE filter condition could increase query times.
+---  WHERE is processed before SELECT and after FROM.
+
+2.5. Filtering with HAVING - Video
 2.6. Row filtering with HAVING
+In some cases, using HAVING, instead of WHERE, as a filter condition will produce the same results. 
+If filtering individual or ungrouped rows then it is more efficient to use WHERE.
+
+In this exercise, you want to know the number of players from Latin American countries playing in the 2017-2018 NBA season.
+
+Question
+Copy the following query to the console and select Run Code to view the results. 
+Why should HAVING not be used as a filter condition in this query?
+
+SELECT Country, COUNT(*) CountOfPlayers 
+FROM Players
+GROUP BY Country
+HAVING Country 
+    IN ('Argentina','Brazil','Dominican Republic'
+        ,'Puerto Rico');SELECT Country, COUNT(*) CountOfPlayers 
+FROM Players
+GROUP BY Country
+HAVING Country 
+    IN ('Argentina','Brazil','Dominican Republic'
+        ,'Puerto Rico');
+
+Possible Answers
+---  An aggregate function must enclose the Country column in the HAVING filter.
+---> The filter is on individual rows. Using HAVING here, for filtering, could increase the time a query takes to run.
+---  The query returns an error because HAVING is processed before GROUP BY.
+---  If a query is using HAVING for filtering it must also use WHERE.
+
+Instructions 2/2
+Add the WHERE filter condition.
+Fill in the missing two Latin American countries in the IN statement.
+
+SELECT Country, COUNT(*) CountOfPlayers
+FROM Players
+-- Add the filter condition
+WHERE Country
+-- Fill in the missing countries
+	IN ('Argentina','Brazil','Dominican Republic'
+        ,'Puerto Rico')
+GROUP BY Country;
+
+
 2.7. Filtering with WHERE and HAVING
+WHERE and HAVING can be used as filters in the same query. 
+But how we use them, where we use them and what we use them for is quite different.
+You want a query that returns the total points contribution of a teams Power Forwards where their total points contribution is greater than 3000.
+
+Instructions
+Apply a filter condition for only rows where position equals Power Forward (PF).
+Apply a grouped row filter for total points greater than 3000.
+
+SELECT Team, 
+	SUM(TotalPoints) AS TotalPFPoints
+FROM PlayerStats
+-- Filter for only rows with power forwards
+WHERE Position = 'PF'
+GROUP BY Team
+-- Filter for total points greater than 3000
+HAVING SUM(TotalPoints) > 3000;
+
+Hint:
+HAVING is always processed after GROUP BY.
+Use the SUM() function on the TotalPoints column for the grouped rows filter condition.
+
 2.8. Test your knowledge of HAVING
-2.9. Interrogation after SELECT
+The following query from the NBA Season 2017-2018 database returns the total points contribution, 
+of a teams Centers, where total points are greater than 2500.
+
+SELECT Team, 
+    SUM(TotalPoints) AS TotalCPoints
+FROM PlayerStats
+WHERE Position = 'C'
+GROUP BY Team
+HAVING SUM(TotalPoints) > 2500;
+
+Copy and paste the above query into the query console and select Run Code to check the results.
+When using HAVING in a query which one of the following statements is FALSE?
+
+---  When filtering a numeric column, HAVING must be used with an aggregate function, for example: SUM(), COUNT(), AVG()...
+---  WHERE and HAVING can be used in the same query.
+---  Use HAVING with, and after, GROUP BY.
+---> HAVING and WHERE produce the same output, so it doesn't matter which one you use.
+
+2.9. Interrogation after SELECT - Video
 2.10. SELECT what you need
+Your friend is a seismologist, and she is doing a study on earthquakes in South East Asia. 
+She asks you for a query that returns coordinate locations, strength, depth and nearest city of all earthquakes in Papua New Guinea and Indonesia.
+
+All the information you need is in the Earthquakes table, and your initial interrogation of the data tells you 
+that the column for the country code is Country and that the Codes for Papua New Guinea and Indonesia are PG and ID respectively.
+
+Instructions 1/2
+SELECT all rows and columns from the Earthquakes table.
+Look at the results of the query to determine which other columns to select.
+
+Hint: One of the first things you learn when taking a course in SQL is SELECT star from a table.
+
+SELECT *
+FROM Earthquakes;
+
+Instructions 2/2
+Complete the query to select only the required columns and filter for only the requested countries.
+
+Hint
+In geographic information systems, Y is latitude, and X is longitude.
+Earthquake strength and magnitude can be considered the same thing in this exercise.
+
+SELECT Latitude, -- Y location coordinate column
+       Longitude, -- X location coordinate column
+	   Magnitude, -- Earthquake strength column
+	   Depth, -- Earthquake depth column
+	   NearestPop -- Nearest city column
+FROM Earthquakes
+WHERE Country = 'PG' -- Papua New Guinea country code
+	OR Country = 'ID'; -- Indonesia country code
+	
+	
 2.11. Limit the rows with TOP
+Your seismologist friend that is doing a study on earthquakes in South East Asia has asked you to subset a query that you provided her. 
+She wants two additional queries for earthquakes recorded in Indonesia and Papua New Guinea. 
+The first returning the ten shallowest earthquakes and the second the upper quartile of the strongest earthquakes.
+
+Instructions 1/2
+Limit the number of rows to ten.
+Order the results from shallowest to deepest.
+
+Hint
+The Depth column indicates how deep, from the earth’s surface, the earthquake is centered — the lower the number, the shallower the depth.
+
+SELECT TOP 10 -- Limit the number of rows to ten
+      Latitude,
+      Longitude,
+	  Magnitude,
+	  Depth,
+	  NearestPop
+FROM Earthquakes
+WHERE Country = 'PG'
+	OR Country = 'ID'
+ORDER BY Depth; -- Order results from shallowest to deepest
+
+Instructions 2/2
+Limit rows to the upper quartile.
+Order the results from strongest to weakest earthquake.
+
+Hint
+A quartile is 25 percent
+The default for ORDER BY is ASC (ascending) use DESC for descending.
+
+SELECT TOP 25 PERCENT -- Limit rows to the upper quartile
+       Latitude,
+       Longitude,
+	   Magnitude,
+	   Depth,
+	   NearestPop
+FROM Earthquakes
+WHERE Country = 'PG'
+	OR Country = 'ID'
+ORDER BY Magnitude DESC; -- Order the results
+
+
 2.12. Should I use ORDER BY?
-2.13. Managing duplicates
+Which of the following statements is FALSE, when considering using ORDER BY in a query?
+---  ORDER BY is processed after SELECT.
+---  ORDER BY is useful for data interrogation and unless there is a good reason to sort the data in a query, try to avoid using it.
+---> ORDER BY is only supported by Microsoft SQL Server and none of the other major database vendors.
+---  ORDER BY can be used in conjunction with the TOP operator.
+
+2.13. Managing duplicates -Video
 2.14. Remove duplicates with DISTINCT()
+You want to know the closest city to earthquakes with a magnitude of 8 or higher. 
+You can get this information from the Earthquakes table. 
+However, a simple query returns duplicate rows because some cities have experienced more than one magnitude 8 or higher earthquake.
+You can remove duplicates by using the DISTINCT() clause. 
+Once you have your results, you would like to know how many times each city has experienced an earthquake of magnitude 8 or higher.
+Note that IS NOT NULL is being used because many earthquakes do not occur near any populated area, thankfully.
+
+Instructions 1/3
+Add the closest city and view the output of the query to confirm duplicated rows.
+Hint: The column representing the closest city is neither called ClosestCity or City.
+
+SELECT NearestPop, -- Add the closest city
+        Country 
+FROM Earthquakes
+WHERE Magnitude >= 8
+	AND NearestPop IS NOT NULL
+ORDER BY NearestPop;
+
+Instructions 2/3
+Add DISTINCT() to the column representing the closest city to remove duplicates.
+Add the filtering condition for earthquakes with a magnitude of 8 or more.
+Hint: The >= operator is used in a WHERE filter condition to filter for values greater than or equal.
+
+SELECT DISTINCT(NearestPop),-- Remove duplicate city
+		Country
+FROM Earthquakes
+WHERE Magnitude >= 8 -- Add filter condition
+	AND NearestPop IS NOT NULL
+ORDER BY NearestPop; 
+
+Instructions 3/3
+Get the number of cities near earthquakes of magnitude 8 or more.
+Add column groupings.
+
+Hints:
+The aggregate function used to get the number of earthquakes is not SUM().
+DISTINCT() is not required.
+The query is grouped by two columns.
+
+SELECT NearestPop, 
+       Country, 
+       COUNT(NearestPop) NumEarthquakes -- Number of cities
+FROM Earthquakes
+WHERE Magnitude >= 8
+	AND Country IS NOT NULL
+GROUP BY NearestPop, Country -- Group columns
+ORDER BY NumEarthquakes DESC;
+
 2.15. UNION and UNION ALL
+You want a query that returns all cities listed in the Earthquakes database. It should be an easy query on the Cities table. 
+However, to be sure you get all cities in the database you will append the query to the Nations table to include capital cities as well. 
+You will use UNION to remove any duplicate rows.
+
+Out of curiosity, you want to know if there were any duplicate rows. 
+If you do the same query but append with UNION ALL instead, 
+and compare the number of rows returned in each query, UNION ALL will return more rows if there are duplicates.
+
+Instructions 1/3
+Add the city column from the Cities table to the first query.
+Append queries using UNION
+Add the column for the Nation capital to the second query.
+Check how many rows were returned
+
+Hint: The column CityName does not appear in the Nations table. Look for another column that contains the names of cities.
+
+SELECT CityName AS NearCityName, -- City name column
+	   CountryCode
+FROM Cities
+
+UNION -- Append queries
+
+SELECT Capital AS NearCityName, -- Nation capital column
+       Code2 AS CountryCode
+FROM Nations;
+
+Instructions 2/3
+Now append the same queries using UNION ALL.
+Add the column for the country code to the second query.
+
+Hint: The column names for the two-digit country code are different in the Cities and Nations tables.
+
+SELECT CityName AS NearCityName,
+	   CountryCode
+FROM Cities
+
+UNION ALL -- Append queries
+
+SELECT Capital AS NearCityName,
+       Code2 AS CountryCode  -- Country code column
+FROM Nations;
+
+Instructions 3/3
+Which of the following is true concerning using UNION ALL and UNION on the queries in Step 1 and Step 2. 
+Run the code in the console and experiment appending queries with UNION and UNION ALL.
+---  Using UNION and UNION ALL returns the same number of rows.
+---  From looking at the tables, I would not expect any duplicate rows with UNION ALL.
+---> More rows are returned with UNION ALL therefore, UNION must be removing duplicates.
+---  More rows are returned with UNION therefore, UNION must be adding duplicates.
+
+
 2.16. UNION or DISTINCT()?
-
-
+When deciding whether to use DISTINCT() or UNION in a query to remove duplicate rows, 
+which of the following questions would you NOT ask yourself?
+---  Is there an alternative method to using DISTINCT()?
+---  Will appending queries produce duplicate rows?
+---  Is there an aggregate function in the SELECT statement?
+---> Should I be thinking about duplicate rows because my queries never produce duplicate rows?
+Hint: counting or applying another aggregate function? If so, DISTINCT() is not required. 
+Use GROUP BY to return the unique rows for the aggregate column.
 
 3. Sub-queries and presence or absence
 This chapter is an introduction to sub-queries and their potential impacts on query performance. It also examines the different methods used to determine if the data in one table is present, or absent, in a related table.
 
-3.1. Sub-queries
+3.1. Sub-queries - Video
 3.2. Uncorrelated sub-query
+A sub-query is another query within a query. The sub-query returns its results to an outer query to be processed.
+
+You want a query that returns the region and countries that have experienced earthquakes centered at a depth of 400km or deeper. 
+Your query will use the Earthquakes table in the sub-query, and Nations table in the outer query.
+
+Instructions 1/2
+Add the country code column to the outer query.
+Add the country code column to the sub-query.
+Filter for a depth of 400km or more.
+
+Hint: The names of the country code columns in Nations and Earthquakes tables are not the same.
+
+SELECT UNStatisticalRegion,
+       CountryName 
+FROM Nations
+WHERE Code2 -- Country code for outer query
+         IN (SELECT Country -- Country code for sub-query
+             FROM Earthquakes
+             WHERE Depth >= 400) -- Depth filter
+ORDER BY UNStatisticalRegion;
+
+
+Instructions 2/2
+Question: Why is the query from Step 1 an example of an uncorrelated sub-query?
+---> The sub-query does not reference the outer query.
+---  The sub-query cannot be run independently of the outer query.
+---  The outer query is referenced in the sub-query.
+---  The sub-query is used as a WHERE filter condition for the outer query. Only uncorrelated sub-queries can be used like this.
+
 3.3. Correlated sub-query
+Sub-queries are used to retrieve information from another table, or query, that is separate to the main query.
+
+A friend is working on a project looking at earthquake hazards around the world. 
+She requires a table that lists all countries, their continent and the average magnitude earthquake by country. 
+This query will need to access data from the Nations and Earthquakes tables.
+
+Instructions 1/2
+Add the average magnitude column in the sub-query.
+Add the Nations country code column reference in the sub-query.
+
+Hint:
+The names of the country code columns in Nations and Earthquakes tables are not the same.
+Average magnitude requires an aggregate function.
+
+SELECT UNContinentRegion,
+       CountryName, 
+        (SELECT AVG(Magnitude) -- Add average magnitude
+        FROM Earthquakes e 
+         	  -- Add country code reference
+        WHERE n.Code2 = e.Country) AS AverageMagnitude 
+FROM Nations n
+ORDER BY UNContinentRegion DESC, 
+         AverageMagnitude DESC;
+	 
+Instructions 2/2
+Question: Why is the query from Step 1 an example of a correlated sub-query?
+---  The sub-query can be run independently of the outer query.
+---  The sub-query does not reference the outer query.
+---> The sub-query references the outer query.
+---  ORDER BY is used to sort the results by a column in the outer query.
+
 3.4. Sub-query vs INNER JOIN
-3.5. Presence and absence
+Often the results from a correlated sub-query can be replicated using an INNER JOIN. 
+Depending on what your requirements are, using an INNER JOIN may be more efficient 
+because it only makes one pass through the data whereas the correlated sub-query must execute for each row in the outer query.
+
+You want to find out the 2017 population of the biggest city for every country in the world. 
+You can get this information from the Earthquakes database with the Nations table as the outer query and Cities table in the sub-query.
+
+You will first create this query as a correlated sub-query then rewrite it using an INNER JOIN.
+
+Instructions 1/2
+Add the 2017 population column from the Cities table.
+Add the outer query country code column to the sub-query.
+Add the outer query table.
+
+Hint: The country code from the Nations table is a two digit code.
+
+SELECT
+	n.CountryName,
+	 (SELECT MAX(c.Pop2017) -- Add 2017 population column
+	 FROM Cities AS c 
+                       -- Outer query country code column
+	 WHERE c.CountryCode = n.Code2) AS BiggestCity
+FROM Nations AS n; -- Outer query tableSELECT
+	n.CountryName,
+	 (SELECT MAX(c.Pop2017) -- Add 2017 population column
+	 FROM Cities AS c 
+                       -- Outer query country code column
+	 WHERE c.CountryCode = n.Code2) AS BiggestCity
+FROM Nations AS n; -- Outer query table
+
+Instructions 2/2
+Join the Nations table to the sub-query.
+Add the joining country code columns from the Nations table and sub-query.
+
+Hint: Use an INNER JOIN between the Nations table and sub-query.
+
+SELECT n.CountryName, 
+       c.BiggestCity 
+FROM Nations AS n
+INNER JOIN -- Join the Nations table and sub-query
+    (SELECT CountryCode, 
+     MAX(Pop2017) AS BiggestCity 
+     FROM Cities
+     GROUP BY CountryCode) AS c
+ON n.Code2 = c.CountryCode; -- Add the joining columns
+
+
+3.5. Presence and absence - Video
 3.6. INTERSECT
+INTERSECT is one of the easier and more intuitive methods used to check if data in one table is present in another.
+
+You want to know which, if any, country capitals are listed as the nearest city to recorded earthquakes. 
+You can get this information by comparing the Nations table with the Earthquakes table.
+
+Instructions
+Add the table with country capital cities to the left query.
+Add the operator that compares the two queries.
+Add the city name column from the Earthquakes table.
+
+SELECT Capital
+FROM Nations -- Table with capital cities
+
+INTERSECT -- Add the operator to compare the two queries
+
+SELECT NearestPop -- Add the city name column
+FROM Earthquakes;
+
+
 3.7. EXCEPT
+EXCEPT does the opposite of INTERSECT. It is used to check if data, present in one table, is absent in another.
+You want to know which countries have no recorded earthquakes. 
+You can get this information by comparing the Nations table with the Earthquakes table.
+
+Instructions
+Add the country code column from the Nations table.
+Add the operator that compares the two queries.
+Add the table with country codes to the right query.
+
+SELECT Code2 -- Add the country code column
+FROM Nations
+
+EXCEPT -- Add the operator to compare the two queries
+
+SELECT Country 
+FROM Earthquakes; -- Table with capital cities
+
 3.8. Interrogating with INTERSECT
-3.9. Alternative methods 1
+INTERSECT and EXCEPT are very useful for data interrogation.
+
+The Earthquakes and NBA Season 2017-2018 databases both contain information on countries and cities. 
+You are interested to know which countries are represented by players in the 2017-2018 NBA season and 
+you believe you can get the results you require by querying the relevant tables across these two databases.
+
+Use the INTERSECT operator between queries, but be careful and think about the results. 
+Although both tables contain a country name column to compare, these are separate databases and the data may be stored differently.
+
+Instructions 1/2
+INTERSECT CountryName from a table in the Earthquakes database and Country from a table in the NBA Season 2017-2018 database.
+
+Hint
+The right query table is Players from the NBA Season 2017-2018 database.
+The Earthquakes table, from the Earthquakes database, is not required for this exercise.
+
+SELECT CountryName 
+FROM Nations -- Table from Earthquakes database
+
+INTERSECT -- Operator for the intersect between tables
+
+SELECT Country
+FROM Players; -- Table from NBA Season 2017-2018 database
+
+Instructions 2/2
+Question
+With one exception, all NBA teams are USA based, so why does USA not appear in the results? Are there no Americans playing in the NBA?
+To help get your answer, use the two queries below;
+
+- Delete the query in the query console.
+- Copy and paste one of the queries into the query console.
+- Select Run Code to view the results.
+- Repeat steps 1 to 4 for the other query.
+
+SELECT * 
+FROM Nations
+WHERE CountryName LIKE 'U%'
+
+SELECT *
+FROM Players
+WHERE Country LIKE 'U%'SELECT *
+FROM Players
+WHERE Country LIKE 'U%'
+
+---  The outer query should be using the Code3 column from the Nations table, not CountryName.
+---> The values do not match. In the Nations table, the value for country name is stored as United States of America, and in the Players table, the value is stored as USA.
+---  The original query contains filters on the Nations and Players tables for countries other than the USA.
+---  INTERSECT is not the correct operator to use. The correct operator to use for this question is EXCEPT.
+
+3.9. Alternative methods 1 - Video
 3.10. IN and EXISTS
+You want to know which, if any, country capitals are listed as the nearest city to recorded earthquakes. 
+You can get this information using INTERSECT and comparing the Nations table with the Earthquakes table. 
+However, INTERSECT requires that the number and order of columns in the SELECT statements must be the same between queries and 
+you would like to include additional columns from the outer query in the results.
+
+You attempt two queries, each with a different operator that gives you the results you require.
+
+Instructions 1/2
+Add the 2017 country population and capital city name columns to the outer query.
+Add the operator to compare the outer query with the sub-query.
+
+Hint: The outer query is on the Nations table.
+
+-- First attempt
+SELECT CountryName,
+	   Pop2017, -- 2017 country population
+	   Capital, -- Capital city
+	   WorldBankRegion
+FROM Nations
+WHERE Capital IN -- Add the operator to compare queries
+       (SELECT NearestPop 
+	    FROM Earthquakes);
+	    
+Instructions 2/2
+Update the query with the 2016 population instead of the 2017 population.
+Add the operator to compare the outer query with the sub-query.
+Add the two city name columns, being compared, in the sub-query.
+
+Hint
+The Earthquakes table is aliased as e and the column containing city names is NearestPop.
+The two columns being compared contain city names and not country codes.
+
+-- Second attempt
+SELECT CountryName,   
+	   Capital,
+       Pop2016, -- 2016 country population
+       WorldBankRegion
+FROM Nations AS n
+WHERE EXISTS -- Add the operator to compare queries
+	  (SELECT 1
+	   FROM Earthquakes AS e
+	   WHERE n.Capital = e.NearestPop); -- Columns being compared
+	   
+	   
 3.11. NOT IN and NOT EXISTS
+NOT IN and NOT EXISTS do the opposite of IN and EXISTS respectively. 
+They are used to check if the data present in one table is absent in another.
+
+You are interested to know if there are some countries in the Nations table that do not appear in the Cities table. 
+There may be many reasons for this. For example, all the city populations from a country may be too small to be listed,
+or there may be no city data for a particular country at the time the data was compiled.
+
+You will compare the queries using country codes.
+
+Instructions 1/2
+Add the operator to compare the outer query with the sub-query.
+Add the country code column to the sub-query.
+
+SELECT WorldBankRegion,
+       CountryName
+FROM Nations
+WHERE Code2 NOT IN -- Add the operator to compare queries
+	(SELECT CountryCode -- Country code column
+	 FROM Cities);
+
+Instructions 2/2
+Add the country capital column to the outer query.
+Add the operator to compare the outer query with the sub-query.
+Add the two country code columns being compared in the sub-query.
+
+Hint: The Nations table is aliased as n and the column containing country code is Code2.
+
+SELECT WorldBankRegion,
+       CountryName,
+	   Code2,
+       Capital, -- Country capital column
+	   Pop2017
+FROM Nations AS n
+WHERE NOT EXISTS -- Add the operator to compare queries
+	(SELECT 1
+	 FROM Cities AS c
+	 WHERE n.Code2 = c.CountryCode); -- Columns being compared
+	 
+
 3.12. NOT IN with IS NOT NULL
-3.13. Alternative methods 2
+You want to know which country capitals have never been the closest city to recorded earthquakes. 
+You decide to use NOT IN to compare Capital from the Nations table, in the outer query, with NearestPop, from the Earthquakes table, in a sub-query.
+
+Instructions 1/2
+Add the country capital name column to the outer query.
+Add the city name column to the sub-query.
+Check how many rows the query returns. Does this mean that earthquakes have been recorded near every capital city in the world?
+
+Hint: The column name for cities nearest to recorded earthquakes is NearestPop.
+
+SELECT WorldBankRegion,
+       CountryName,
+       Capital -- Capital city name column
+FROM Nations
+WHERE Capital NOT IN
+	(SELECT NearestPop -- City name column
+	 FROM Earthquakes);
+
+Instructions 2/2
+The column in the SELECT statement of the sub-query contains NULL values and will require a filter to remove the NULL values from the query.
+
+Add the WHERE filter condition to the sub-query to get the query working correctly.
+
+Hint: The column in the WHERE filter condition is the same as the column specified in the SELECT statement of the sub-query.
+
+SELECT WorldBankRegion,
+       CountryName,
+       Capital
+FROM Nations
+WHERE Capital NOT IN
+	(SELECT NearestPop
+     FROM Earthquakes
+     WHERE NearestPop IS NOT NULL); -- filter condition
+     
+3.13. Alternative methods 2 - Video
 3.14. INNER JOIN
+An insurance company that specializes in sports franchises has asked you to assess the geological hazards of cities hosting NBA teams. 
+You believe you can get this information by querying the Teams and Earthquakes tables across the Earthquakes and NBA Season 2017-2018 databases respectively. ,
+Your initial query will use EXISTS to compare tables. The second query will use a more appropriate operator.
+
+Instructions 1/3
+Add the table for the outer query.
+Add the operator to compare the outer query with the sub-query.
+Add the table for the sub-query.
+Check the results. Only columns from the Teams table are returned.
+
+Hint: Which methods use a WHERE filter condition to check for the presence of data in two related tables?
+
+-- Initial query
+SELECT TeamName,
+       TeamCode,
+	   City
+FROM Teams AS t -- Add table
+WHERE EXISTS -- Operator to compare queries
+      (SELECT 1 
+	  FROM Earthquakes AS e -- Add table
+	  WHERE t.City = e.NearestPop);
+	  
+	  
+Instructions 2/3
+Something doesn't look right. You'll need columns from the Earthquakes and Teams tables to makes sense of the results.
+
+Add the place description and country code where the earthquake occurred.
+Add the operator to compare the tables.
+
+Hint:
+Which operator allows you to return columns from any of the tables being compared?
+The place description column provides additional information about the location of the earthquake, such as if it was near the coastline of a certain region or country.
+
+-- Second query
+SELECT t.TeamName,
+       t.TeamCode,
+	   t.City,
+	   e.Date,
+	   e.Place, -- Place description
+	   e.Country -- Country code
+FROM Teams AS t
+INNER JOIN Earthquakes AS e -- Operator to compare tables
+	  ON t.City = e.NearestPop
+	  
+	  
+Instructions 3/3
+Question: In this exercise, what does the INNER JOIN help you to determine that EXISTS could not?
+---  Queries that use EXISTS are slower than queries that use INNER JOIN.
+---  The INNER JOIN returned two rows, so there must be duplicate rows in the Teams table.
+---  The NBA team based in San Antonio, USA has a high risk of earthquake hazards.
+---> The earthquakes occurred in San Antonio, Chile, not San Antonio, USA.
+
+
 3.15. Exclusive LEFT OUTER JOIN
+An exclusive LEFT OUTER JOIN can be used to check for the presence of data in one table that is absent in another table. 
+To create an exclusive LEFT OUTER JOIN the right query requires an IS NULL filter condition on the joining column.
+
+Your sales manager is concerned that orders from French customers are declining. 
+He wants you to compile a list of French customers that have not placed any orders so he can contact them.
+
+Instructions 1/2
+Add the joining operator between the Customers and Orders tables.
+Add the joining columns from the Customers and Orders tables.
+
+-- First attempt
+SELECT c.CustomerID,
+       c.CompanyName,
+	   c.ContactName,
+	   c.ContactTitle,
+	   c.Phone 
+FROM Customers c
+LEFT OUTER JOIN Orders o -- Joining operator
+	ON c.CustomerID = o.CustomerID -- Joining columns
+WHERE c.Country = 'France';
+
+
+Instructions 2/2
+Add the filter condition to turn the query into an exclusive LEFT OUTER JOIN
+
+Hint
+If the filter condition is IS NOT NULL, you would be checking for customers present in the orders table, 
+but the requirement is for customers absent from the orders table.
+
+-- Second attempt
+SELECT c.CustomerID,
+       c.CompanyName,
+	   c.ContactName,
+	   c.ContactTitle,
+	   c.Phone 
+FROM Customers c
+LEFT OUTER JOIN Orders o
+	ON c.CustomerID = o.CustomerID
+WHERE c.Country = 'France'
+	AND o.CustomerID IS NULL; -- Filter condition
+	
+
 3.16. Test your knowledge
+The Venn diagram below describes which method used to check whether the data in one table is present, or absent, in a related table?
+
+>         Left Query or Outer Query   V   Right Query or Sub-Query
+
+The Earthquakes database is available for you to test scenarios in the query console.
+
+Instructions
+Possible Answers
+---  EXISTS
+---  inclusive LEFT OUTER JOIN
+---  INTERSECT
+---> exclusive LEFT OUTER JOIN
+
+EXISTS checks for data in one table that is present in a related table. In a Venn diagram, the intersection of the two circles would be highlighted.
+The results of an inclusive LEFT OUTER JOIN would contain all rows from the left query regardless of whether there is a match in the right query. In a Venn diagram, the entire left circle would be highlighted.
+INTERSECT checks for data in one table that is present in a related table. In a Venn diagram, the intersection of the two circles would be highlighted.
+
+An exclusive LEFT OUTER JOIN checks for data in one table that is absent in a related table. It does this by using IS NULL in a WHERE filter condition of the right query to restrict it to rows that do not match in the left query.An exclusive LEFT OUTER JOIN checks for data in one table that is absent in a related table. 
+It does this by using IS NULL in a WHERE filter condition of the right query to restrict it to rows that do not match in the left query.
+
 
 4. Query performance tuning
 Students are introduced 
 to how STATISTICS TIME, STATISTICS IO, indexes, and executions plans can be used in SQL Server to help analyze and tune query performance.
 
 4.1. Time statistics
-4.1. STATISTICS TIME in queries
-4.1. STATISTICS TIME results
-4.1. Page read statistics
-4.1. STATISTICS IO: Example 1
-4.1. STATISTICS IO: Example 2
-4.1. STATISTICS IO comparison
-4.1. Indexes
-4.1. Test your knowledge of indexes
-4.1. Clustered index
-4.1. Execution plans
-4.1. Sort operator in execution plans
-4.1. Test your knowledge of execution plans
-4.1. Query performance tuning: final notes
+4.2. STATISTICS TIME in queries
+4.3. STATISTICS TIME results
+4.4. Page read statistics
+4.5. STATISTICS IO: Example 1
+4.6. STATISTICS IO: Example 2
+4.7. STATISTICS IO comparison
+4.8. Indexes
+4.9. Test your knowledge of indexes
+4.10. Clustered index
+4.11. Execution plans
+4.12. Sort operator in execution plans
+4.13. Test your knowledge of execution plans
+4.14. Query performance tuning: final notes
