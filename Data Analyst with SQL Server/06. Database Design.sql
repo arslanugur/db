@@ -1203,9 +1203,241 @@ JOIN film_descriptions USING(film_id);
 Now you know how to CREATE, INSERT and ALTER statements!
 
 4.9. Creating horizontal partitions
+In the video, you also learned about horizontal partitioning.
+
+The example of horizontal partitioning showed the syntax necessary to create horizontal partitions in PostgreSQL. If you need a reminder, you can have a look at the slides.
+
+In this exercise, however, you'll be using a list partition instead of a range partition. For list partitions, you form partitions by checking whether the partition key is in a list of values or not.
+
+To do this, we partition by LIST instead of RANGE. When creating the partitions, you should check if the values are IN a list of values.
+
+We'll be using the following columns in this exercise:
+
+film_id: the unique identifier of the film
+title: the title of the film
+release_year: the year it's releasedfilm_id: the unique identifier of the film
+title: the title of the film
+release_year: the year it's released
+
+Instructions 1/3
+Create the table film_partitioned, partitioned on the field release_year.
+
+Code:
+-- Create a new table called film_partitioned
+CREATE TABLE film_partitioned (
+  film_id INT,
+  title TEXT NOT NULL,
+  release_year TEXT
+)
+PARTITION BY LIST (release_year);
+
+Instructions 2/3
+Create three partitions: one for each release year: 2017, 2018, and 2019. Call the partition for 2019 film_2019, etc.
+
+Code:
+-- Create a new table called film_partitioned
+CREATE TABLE film_partitioned (
+  film_id INT,
+  title TEXT NOT NULL,
+  release_year TEXT
+)
+PARTITION BY LIST (release_year);
+
+-- Create the partitions for 2019, 2018, and 2017
+CREATE TABLE film_2019
+	PARTITION OF film_partitioned FOR VALUES IN ('2019');
+
+CREATE TABLE film_2018
+	PARTITION OF film_partitioned FOR VALUES IN ('2018');
+
+CREATE TABLE film_2017
+	PARTITION OF film_partitioned FOR VALUES IN ('2017');
+
+
+Instructions 3/3
+Occupy the new table the three fields required from the film table.
+
+Code:
+-- Create a new table called film_partitioned
+CREATE TABLE film_partitioned (
+  film_id INT,
+  title TEXT NOT NULL,
+  release_year TEXT
+)
+PARTITION BY LIST (release_year);
+
+-- Create the partitions for 2019, 2018, and 2017
+CREATE TABLE film_2019
+	PARTITION OF film_partitioned FOR VALUES IN ('2019');
+
+CREATE TABLE film_2018
+	PARTITION OF film_partitioned FOR VALUES IN ('2018');
+
+CREATE TABLE film_2017
+	PARTITION OF film_partitioned FOR VALUES IN ('2017');
+
+-- Insert the data into film_partitioned
+INSERT INTO film_partitioned
+SELECT film_id, title, release_year FROM film;
+
+-- View film_partitioned
+SELECT * FROM film_partitioned;
+
+As you can see, the data is not changed in the partitioned table. However, you might notice PostgreSQL orders the partitioned table differently by default.
+
+
 4.10. Data integration
+1. Data integration
+You're now familiar with tables, databases, schemas and permissions. But what if your data is spread across different databases, formats, schemas and technologies? That's where data integration comes into play.
+
+2. What is data integration
+Data Integration combines data from different sources, formats, technologies to provide users with a translated and unified view of that data. Let's look at some examples.
+
+3. Business case examples
+A company could want a 360-degree customer view, to see all information departments have about a customer in a unified place. Another example is one company acquiring another, and needs to combine their respective databases. Legacy systems are also a common case of data integration. An insurance company with claims in old and new systems, would need to integrate data to query all claims at once.
+
+4. Unified data model
+There are a few things to consider when integrating data. What is your final goal? Your unified data model could be used to create dashboards, like graphs of daily sales, or data products, such as a recommendation engine. The final data model needs to be fast enough for your use-case.
+
+5. Data sources
+The necessary information is held in these data sources.
+
+6. Data sources format
+Which formats is each data source stored in? For example, it could be PostgreSQL, MongoDB or a CSV. You'll learn more about database management systems in the next lesson.
+
+7. Unified data model format
+Which format should the unified data model take? For example, Redshift, a data warehouse service offered by AWS.
+
+8. Example: DataCamp
+Say DataCamp is launching a skill assessment module. Marketing wants to know which customers to target. They need information from sales, stored in PostgreSQL, to see which customers can afford the new product. They also need information from the product department, stored in MongoDB to identify potential early adopters.
+
+9. Update cadence - sales
+Next, how often do you want to update the data? Updating daily would probably be sufficient for sales data.
+
+10. Update cadence - air traffic
+For a scenario like air traffic, you want real time updates.
+
+11. Different update cadences
+Your data sources can have different update cadences.
+
+12. So simple?
+So that’s it? You just plug your sources to the unified data model?
+
+13. Not really
+Not really. Your sources are in different formats, you need to make sure they can be assembled together.
+
+14. Transformations
+Enter transformations. A transformation is a program that extracts content from the table and transforms it into the chosen format for the unified model. These transformations can be hand-coded, but you would have to make and maintain a transformation for each data source.
+
+15. Transformation - tools
+You can also use a data integration tool, which provides the needed ETL. For example Apache Airflow or Scriptella.
+
+16. Choosing a data integration tool
+When choosing your tool, you must ensure that it's flexible enough to connect to all of your data sources. Reliable, so that it can still be maintained in a year. And it should scale well, anticipating an increase in data volume and sources.
+
+17. Automated testing and proactive alerts
+You should have automated testing and proactive alerts. If any data gets corrupted on its way to the unified data model, the system lets you know. For example, you could aggregate sales data after each transformation and ensure that the total amount remains the same.
+
+18. Security
+Security is also a concern: if data access was originally restricted, it should remain restricted in the unified data model.
+
+19. Security - credit card anonymization
+For example, business analysts using the unified data model should not have access to the credit card numbers. You should anonymize the data during ETL so that analysts can only access the first four numbers, to identify the type of card being used.
+
+20. Data governance - lineage
+For data governance purposes, you need to consider lineage: for effective auditing, you should know where the data originated and where it is used at all times.
+
+
 4.11. Data integration do's and dont's
+
+Hint
+Data sources can be in any format, database management system or location.
+Don't throw all you data together and make the integration in real-time without a business goal in mind.
+You can easily reference the video by clicking the video icon in the top right corner.
+
+
 4.12. Analyzing a data integration plan
+You're a data analyst in a hospital that wants to make sure there is enough cough medicine should an epidemic break out. For this, you need to combine the historical health records with the upcoming appointments to see if you can detect a pattern similar to the last cold epidemic. Then, you need to make sure there is sufficient stock available or if the stock should be increased. To help tackle this problem, you created a data integration plan.
+
+Which risk is not clearly indicated on the data integration plan?
+---> You should indicate that you plan to anonymize patient health records.
+
+Hint
+This plan summarizes everything you have seen about data integration:
+
+You know which departments own the original data.
+You took lineage into account and showed that you can track where the patient data originates from.
+You took data integrity into account and have automated tests before and after ETL.
+You know the data is coming from PostgreSQL, MongoDB and a CSV file.
+
+When working with sensitive data it is important to think about permissions. By default you should have the same access rights before and after data integration. If part of the data is essential, it should be anonymized, in this case you can keep the illnesses but remove identifying information.
+
+
 4.13. Picking a Database Management System (DBMS)
+1. Picking a Database Management System (DBMS)
+In this final video, you will learn about Database Management Systems.
+
+2. DBMS
+DBMS stands for Database Management System. A DBMS is a system software for creating and maintaining databases. The DBMS manages three important aspects: the data, the database schema which defines the database’s logical structure, and the database engine that allows data to be accessed, locked and modified. Essentially, the DBMS serves as an interface between the database and end users or application programs.
+
+3. DBMS types
+Your choice of DBMS is informed by the type of database you need, which depends largely on the kind of data you have and how you want to use it. There are two common types of DBMSs: SQL DBMSs, and NoSQL DBMSs. Let's take a closer look.
+
+4. SQL DBMS
+A SQL DBMS, also called a Relational DataBase Management System, is a kind of DBMS based on the relational data model. This is what's been used in the course so far. RDBMSs typically employ SQL for managing and accessing data. Some examples of RDBMSs include SQL Server, PostgreSQL, and Oracle SQL. There are two reasons why you might consider an RDBMS. It's a good option when working with structured, unchanging data that will benefit from a predefined schema. Or if all data must be consistent without leaving room for error, such as with accounting systems for example.
+
+5. NoSQL DBMS
+Non-relational DBMSs are called NoSQL DBMSs. They’re much less structured than relational databases, and are document-centered, rather than table-centered. Data in NoSQL databases don’t have to fit into well-defined rows and columns. NoSQL is a good choice for those companies experiencing rapid data growth with no clear schema definitions. NoSQL offers much more flexibility than a SQL DBMS and is a solid option for companies who must analyze large quantities of data or manage data structures that vary. NoSQL DBMSs are generally classified as one of four types: key-value store, document store, columnar, or graph databases.
+
+6. NoSQL DBMS - key-value store
+A key-value database stores combinations of keys and values. The key serves as a unique identifier to retrieve an associated value. Values can be anything from simple objects, like integers or strings, to more complex objects, like JSON structures. They are most frequently used for managing session information in web applications. For example, managing shopping carts for online buyers. An example DBMS is Redis.
+
+7. NoSQL DBMS - document store
+Document stores are similar to key-value in that they consist of keys, each corresponding to a value. The difference is that the stored values, referred to as documents, provide some structure and encoding of the managed data. That structure can be used to do more advanced queries on the data instead of just value retrieval. A document database is a great choice for content management applications such as blogs and video platforms. Each entity that the application tracks can be stored as a single document. An example of a document store DBMS is mongoDB.
+
+8. NoSQL DBMS - columnar database
+Rather than grouping columns together into tables, columnar databases store each column in a separate file in the system’s storage. This allows for databases that are more scalable, and faster at scale. Use a columnar database for big data analytics where speed is important. An example is Cassandra.
+
+9. NoSQL DBMS - graph database
+Here, the data is interconnected and best represented as a graph. This method is capable of lots of complexity. Graph databases are used by most social networks and pretty much any website that recommends anything based on your behavior. An example of a graph DBMS is Neo4j.
+
+10. Choosing a DBMS
+So, the choice of the database depends on the business need. If your application has a fixed structure and doesn’t need frequent modifications, a SQL DBMS is preferable. Conversely, if you have applications where data is changing frequently and growing rapidly, like in big data analytics, NoSQL is the best option for you.
+
+
 4.14. SQL versus NoSQL
+Deciding when to use a SQL versus NoSQL DBMS depends on the kind of information you’re storing and the best way to store it. Both types store data, they just store data differently.
+
+When is it better to use a SQL DBMS?
+---> You are concerned about data consistency and 100% data integrity is your top goal.
+
+Hint
+SQL DBMSs excel at handling highly structured data and provide support for consistent data.
+NoSQL DBMSs are a schema-less alternative to SQL DBMSs and are designed to store, process and analyze extremely large amounts of unstructured data.
+
+The strength of SQL DBMSs lies in using integrity constraints to maintain data consistency across multiple tables.
+
 4.15. Choosing the right DBMS
+As you saw in the video, there are lots of different options when choosing a DBMS. The choice depends on the business need. In this exercise, you are given a list of cards describing different scenarios and it's your job to pick the DBMS type that fits the project best. Remember the different DBMS types:
+
+SQL: RDBMS
+NoSQL: key-value store, document store, columnar database, graph database
+
+Hint
+An RDBMS is an excellent choice when data must be consistent without leaving room for error.
+Key-value DBMSs are great for managing session information, like shopping carts, in web applications.
+Due to their flexible schema, document DBMSs are perfect for collecting and storing any type of data.
+Columnar DBMSs are great for big data analytics where speed is important.
+A graph DBMS's purpose is to make it easy to build and run applications that work with highly connected datasets, like networks.
+
+
+SQL
+A banking application where it's extremely important that data integrity s ensured
+
+NoSQL
+A blog that needs to create and incorporate new types of content, such as images, comments, and videos.
+Data warehousing on big data
+A social media tool that provides users with the opportunities to grow their networks via connections
+During the holiday shopping season, an e-commmerce website needs to keep track of millions of shopping carts.
+
+As you can see there are many different DBMS types and you need to carefully consider the business needs before making your decision.
