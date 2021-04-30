@@ -1,0 +1,43 @@
+3. Get Only What You Need, and Fast
+"""You can now query collections with ease and collect documents to examine and analyze with Python. 
+    But this process is sometimes slow and onerous for large collections and documents. 
+    This chapter is about various ways to speed up and simplify that process."""
+
+3.1. Projection
+1. Projection: Getting only what you need
+In this chapter, we're going to learn about getting only what you need, and fast. We'll start with what MongoDB calls "projection".
+
+2. What is "projection"?
+The term "projection" is about reducing multidimensional data. In cartography, it's about getting what you need to make a reasonable image from a 3D earth. You can also think about asking a certain part of your data to project its voice, to "speak up"! With a table of data, it's about selecting columns. With MongoDB, it's about selecting substructure.
+
+3. Projection in MongoDB
+In MongoDB, we fetch projections by specifying what document fields interest us. We can do this by passing a dictionary as a second argument to the "find" method of a collection. For each field that we want to include in the projection, we give a value of 1. Fields that we don't include in the dictionary are not included in the projection. The exception is a document's "_id" field. The "_id" field is always included in a projection by default. We must assign it the value 0 in the projection dictionary to leave it out. Here I try to collect the prize affiliation data for all laureates - my filter document is empty. What I get back is not the data itself, but a so-called cursor, an iterable that I can fetch documents from, one at a time.
+
+4. Projection in MongoDB
+In Python, we can collect from an iterable into a list. We do this by passing it to the "list" function. I don't want to print out hundreds of laureate documents. Thus, I also use slicing syntax to get only the first three elements of the resulting list. We can see that our projections contain only document data about prize affiliations. We also retained the structure of that data. Remember how to project fields this way: it’s going to be very useful in the rest of the course.
+
+5. Missing fields
+What happens when you try to project out fields that are not present in some documents? Rather than raise an error, MongoDB returns the documents without those fields. This expression projects the bornCountry field. This field isn't present for organization laureates, though. Only the firstName and id fields get returned. Notice that I formatted a projection as a list of fields. When a projection doesn't involve excluding fields, the pymongo driver accepts this format.
+
+6. Missing fields
+Also, it's okay if a projected field isn't in any of a collection's documents. Here, because there is no favoriteIceCreamFlavor field, the projection returns only object IDs.
+
+7. Simple aggregation
+We're going to learn about MongoDB's aggregation framework in the next chapter. But already we have a new tool to fetch less data, only what we need. For example, let's count the total number of prize medals awarded. That is, the total number of elements in prizes arrays across all laureates. We can iterate over a cursor of all laureates with only the prizes field projected out. In this way, we avoid having to download the other data in each laureate document. This can definitely affect performance for very large collections. We can even, in this case, use a comprehension to reduce memory overhead in Python. We can leverage Python's built-in tools for iterables and dictionaries. And we can use projection to slim down these dictionaries to contain only what we need for our analysis.
+
+
+3.2. Shares of the 1903 Prize in Physics
+3.3. Rounding up the G.S. crew
+3.4. Doing our share of data validation
+3.5. Sorting
+3.6. What the sort?
+3.7. Sorting together: MongoDB + Python
+3.8. Gap years
+3.9. What are indexes?
+3.10. High-share categories
+3.11. Recently single?
+3.12. Born and affiliated
+3.13. Limits
+3.14. Setting a new limit?
+3.15. The first five prizes with quarter shares
+3.16. Pages of particle-prized people
