@@ -379,9 +379,181 @@ Finally, I want to show you some tools to troubleshoot query performance. We won
 
 
 3.10. High-share categories
+In the year 3030, everybody wants to be a Nobel laureate. Over the last thousand years, many new categories have been added. You serve a MongoDB prizes collection with the same schema as we've seen. Many people theorize that they have a better chance in "high-share" categories. They are hitting your server with similar, long-running queries. It's time to cover those queries with an index.
+
+Which of the following indexes is best suited to speeding up the operation db.prizes.distinct("category", {"laureates.share": {"$gt": "3"}})?
+
+Answer the question
+Possible Answers
+[("category", 1)] -- Recall that for a distinct query the filter argument is passed as a second argument, whereas the projected field is passed first.
+[("category", 1), ("laureates.share", 1)] 
+[("laureates.share", 1)] -- This index does indeed speed up the query, but we can do better by covering the projection of the category field as well.
+---> [("laureates.share", 1), ("category", 1)] --- For a distinct query the filter argument is passed as a second argument, whereas the projected field is passed first.
+
+Hint
+Recall that for a distinct query the filter argument is passed as a second argument, whereas the projected field is passed first. For an index to cover a query that filters and projects, we want a compound index on the filter field and then on the projection field (if it's different than the filter field).
+
 3.11. Recently single?
+A prize might be awarded to a single laureate or to several. For each prize category, report the most recent year that a single laureate -- rather than several -- received a prize in that category. As part of this task, you will ensure an index that speeds up finding prizes by category and then sorting results by decreasing year
+
+Instructions
+Specify an index model that indexes first on category (ascending) and second on year (descending).
+Save a string report for printing the last single-laureate year for each distinct category, one category per line. To do this, for each distinct prize category, find the latest-year prize (requiring a descending sort by year) of that category (so, find matches for that category) with a laureate share of "1".
+
+Hint
+An index model is a list of (field, direction) pairs, where direction is either 1 (ascending) or -1 (descending). Recall that the argument passed to find or find_one's sort parameter is formatted similarly. Thus, to obtain latest-year prize documents, you sort by [("year", -1)]. Use <collection>.distinct to find distinct values of a field such as "category".
+
+Code:
+# Specify an index model for compound sorting
+index_model = [("category", 1), ("year", -1)]
+db.prizes.create_index(index_model)
+
+# Collect the last single-laureate year for each category
+report = ""
+for category in sorted(db.prizes.distinct("category")):
+    doc = db.prizes.find_one(
+        {"category": category, "laureates.share": "1"},
+        sort=[("year", -1)]
+    )
+    report += "{category}: {year}\n".format(**doc)
+
+print(report)
+
+Simply singular! It seems that physics is the most consistently shared prize category in modern times.
+
 3.12. Born and affiliated
+Some countries are, for one or more laureates, both their country of birth ("bornCountry") and a country of affiliation for one or more of their prizes ("prizes.affiliations.country"). You will find the five countries of birth with the highest counts of such laureates.
+
+Instructions
+Create an index on country of birth ("bornCountry") for db.laureates to ensure efficient gathering of distinct values and counting of documents
+Complete the skeleton dictionary comprehension to construct n_born_and_affiliated, the count of laureates as described above for each distinct country of birth. For each call to count_documents, ensure that you use the value of country to filter documents properly.
+
+Hint
+For a given country of birth country, you want to count the number of laureates documents for which that country is both the "bornCountry" and a "prizes.affiliations.country" for the laureate.
+
+Code:
+from collections import Counter
+
+# Ensure an index on country of birth
+db.laureates.create_index([("bornCountry", 1)])
+
+# Collect a count of laureates for each country of birth
+n_born_and_affiliated = {
+    country: db.laureates.count_documents({
+        "bornCountry": country,
+        "prizes.affiliations.country": country
+    })
+    for country in db.laureates.distinct("bornCountry")
+}
+
+five_most_common = Counter(n_born_and_affiliated).most_common(5)
+print(five_most_common)
+
+As you may guess, simple string matching of country names for this dataset is problematic, but this is a solid first pass.
+
+
+
 3.13. Limits
+1. Limits and Skips with Sorts, Oh My!
+In this lesson we will learn about the limit and skip parameters of Mongo queries. They can help us inspect a few documents at a time and page through a collection. In concert with sorting, they can help us get documents with extreme values.
+
+2. Limiting our exploration
+Let's say I want to get prize category and year information for a few prizes split three ways. First, I check that for all prizes, either all laureates have a one-third share, or none have a one-third share. I verify my assumption with this for-loop of assertions. Now, I can print information on prizes split three ways. I filter for laureate share equal to three, and I get a long iterator: tens of lines fill my screen. Can I fetch only a few documents to examine before I decide how to proceed next in my analysis? Yes. Mongo provides a convenient limit option as an extra parameter to the find method. There we go.
+
+3. Skips and paging through results
+Besides limiting the number of results, we can also skip results server-side. When you use the "skip" parameter in conjunction with limits, you can get pagination, with the number of results per page set by the limit parameter.
+
+4. Using cursor methods for {sort, skip, limit}
+You can also chain methods to a cursor. This is an alternative to passing extra parameters to the "find" method. Here's what this looks like in the case of setting limits. I don't pass "limit" as a keyword argument to the find method. Rather, I chain the limit method, with an argument of three, to the cursor. And here's how to amend a cursor by chaining both skip and limit methods to it. Finally, I can even alter the sorting on a cursor by chaining a call to the sort method. Here, I sort by ascending year.
+
+5. Simpler sorts of sort
+One last thing. When sorting using the chained method, pymongo allows a couple of shortcuts. Here we specify sorting as before with a list of (field, direction) pairs. There is only one pair because we are sorting by only one field. In this case, we can destructure that single pair. Here I specify the sort with the field as the first argument and the direction as the second argument. Furthermore, pymongo will take the default direction to be ascending. Thus, we can sort by ascending year as a chained call with a single argument, "year". All these cursors yield the same sequence of documents. Finally, note that using the "find_one" method is different. It's like a call to "find" with the limit set to one and with automatic fetching from the cursor. Thus, in this case, you cannot use cursor methods - you need to pass skip and sort requirements as arguments.
+
+6. Limit or Skip Practice? Exactly.
+Before you skip ahead, let's test some limits. Especially after getting some things sorted.
+
+
 3.14. Setting a new limit?
+How many documents does the following expression return?
+
+list(db.prizes.find({"category": "economics"},
+                    {"year": 1, "_id": 0})
+     .sort("year")
+     .limit(3)
+     .limit(5))
+
+Instructions
+Possible Answers
+---  3: the first call to limit takes precedence --- Try evaluating the given expression in your console
+---> 5: the second call to limit overrides the first ---  You can think of the query parameters as being updated like a dictionary in Python: 
+            d = {'limit': 3}; d.update({'limit': 5}); print(d) 
+                                                   will print "{'limit': 5}"
+---  none: instead, an error is raised  -- 
+
+
+Hint
+Try evaluating the given expression in your console.
+
+
+
 3.15. The first five prizes with quarter shares
+Find the first five prizes with one or more laureates sharing 1/4 of the prize. Project our prize category, year, and laureates' motivations.
+
+Instructions
+Save to filter_ the filter document to fetch only prizes with one or more quarter-share laureates, i.e. with a "laureates.share" of "4".
+Save to projection the list of field names so that prize category, year and laureates' motivations ("laureates.motivation") may be fetched for inspection.
+Save to cursor a cursor that will yield prizes, sorted by ascending year. Limit this to five prizes, and sort using the most concise specification.
+
+Hint
+Evaluate db.prizes.find_one() in the console to refresh your memory of prize-document fields and how their values are formatted. Recall that <cursor>.sort(<field>) will sort a cursor by
+
+Code:
+from pprint import pprint
+
+# Fetch prizes with quarter-share laureate(s)
+filter_ = {'laureates.share': '4'}
+
+# Save the list of field names
+projection = ['category', 'year', 'laureates.motivation']
+
+# Save a cursor to yield the first five prizes
+cursor = db.prizes.find(filter_, projection).sort("year").limit(5)
+pprint(list(cursor))
+
+For all of these prizes, there were two laureates with quarter shares for their work together, and there was a third laureate with a half share for separate work (as evidenced by the motivation fields).
+
+
 3.16. Pages of particle-prized people
+
+You and a friend want to set up a website that gives information on Nobel laureates with awards relating to particle phenomena. You want to present these laureates one page at a time, with three laureates per page. You decide to order the laureates chronologically by award year. When there is a "tie" in ordering (i.e. two laureates were awarded prizes in the same year), you want to order them alphabetically by surname.
+
+Instructions
+Complete the function get_particle_laureates that, given page_number and page_size, retrieves a given page of prize data on laureates who have the word "particle" (use $regex) in their prize motivations ("prizes.motivation"). Sort laureates first by ascending "prizes.year" and next by ascending "surname".
+Collect and save the first nine pages of laureate data to pages.
+
+Hint
+The MongoDB query operator $regex helps with substring matching, so that {"prizes.motivation": {"$regex": "particle"}} will find laureates who have the word "particle" in any of their prize motivations. Note that you will need both the skip and limit methods of a cursor to implement pagination on it.
+
+Code:
+from pprint import pprint
+
+# Write a function to retrieve a page of data
+def get_particle_laureates(page_number=1, page_size=3):
+    if page_number < 1 or not isinstance(page_number, int):
+        raise ValueError("Pages are natural numbers (starting from 1).")
+    particle_laureates = list(
+        db.laureates.find(
+            {"prizes.motivation": {"$regex": "particle"}},
+            ["firstname", "surname", "prizes"])
+        .sort([("prizes.year", 1), ("surname", 1)])
+        .skip(page_size * (page_number - 1))
+        .limit(page_size))
+    return particle_laureates
+
+# Collect and save the first nine pages
+pages = [get_particle_laureates(page_number=page) for page in range(1,9)]
+pprint(pages[0])
+
+Particles may be small, but discoveries related to them have made quite an impact!
+
+
