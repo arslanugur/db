@@ -9,3 +9,4 @@
 
 > DataCamp
  - Career Track: Data Analyst with SQL Server
+ - Introduction to Using MongoDB for Data Science in Python
