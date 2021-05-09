@@ -774,13 +774,337 @@ such as finding possible flight routes, assembling a car, and modeling a power g
 
 4.1. Travel planning for flight data
 4.2. Get the anchor & recursive member
+Find the correct combination of fields to create a flying route.
+
+ Flight number and departure airport
+ Destination airport and flight number
+ Flight costs and departure airport
+--> Departure airport and the destination airport
+ 
 4.3. Get all possible airports
+Define the CTE table possible_Airports with the field Airports.
+
+Select the airports by combining Departure and Arrival airports.
+
+Combine the departure with the destination airports using the correct statement.
+
+Select all possible Airports from possible_Airports.
+
+WITH possible_Airports (Airports) AS(
+  	SELECT Departure AS Airports
+  	FROM flightPlan
+  	UNION 
+  	SELECT Arrival AS Airports
+  	FROM flightPlan)
+
+SELECT DISTINCT Airports
+FROM possible_Airports;
+
+Airports
+Chicago
+Franfurt
+Frankfurt
+...
+
 4.4. All flight routes from Vienna
+Initialize the number of stops, increment it in the recursive query, and limit it to less than 5.
+
+WITH flight_route (Departure, Arrival, stops) AS(
+  	SELECT 
+  	  	f.Departure, f.Arrival,
+  	  	0
+  	FROM flightPlan f
+  	WHERE Departure = 'Vienna'
+  	UNION ALL
+  	SELECT 
+  	  	p.Departure, f.Arrival,
+  	  	p.stops + 1
+  	FROM flightPlan f, flight_route p
+  	WHERE p.Arrival = f.Departure AND 
+  	      p.stops < 5)
+
+SELECT 
+	DISTINCT Arrival, 
+    Departure, 
+    stops
+FROM flight_route;
+
+Arrival		Departure	stops
+Chicago		Vienna		0
+Chicago		Vienna		2
+Chicago		Vienna		3
+...
+
+
+Define the field route describing the flight route (Departure to Arrival)
+
+Track each recursion step with the Departure and Arrival airport.
+
+WITH flight_route (Departure, Arrival, stops, route) AS(
+	SELECT 
+	  	f.Departure, f.Arrival, 
+	  	0,
+	  	CAST(f.Departure + ' -> ' + f.Arrival AS NVARCHAR(MAX))
+	FROM flightPlan f
+	WHERE Departure = 'Vienna'
+	UNION ALL
+	SELECT 
+	  	p.Departure, f.Arrival, 
+	  	p.stops + 1,
+	  	p.route + ' -> ' + f.Arrival
+	FROM flightPlan f, flight_route p
+	WHERE p.Arrival = f.Departure AND 
+	      p.stops < 5)
+
+SELECT 
+	DISTINCT Arrival, 
+    Departure, 
+    route, 
+    stops
+FROM flight_route;
+
+Arrival	Departure	route																		stops
+Chicago	Vienna		Vienna -> Chicago															0
+Chicago	Vienna		Vienna -> New York -> Paris -> Frankfurt -> New York -> Vienna -> Chicago	5
+Chicago	Vienna		Vienna -> New York -> Paris -> Frankfurt -> Paris -> Vienna -> Chicago		5
+...
+
+Add a totalCost field to the CTE and define it with the flight cost of the first flight.
+
+Add the cost for each layover to the total costs.
+
+Output the destinations where the totalCost is less than 500.
+
+WITH flight_route (Departure, Arrival, stops, totalCost, route) AS(
+	SELECT 
+	  	f.Departure, f.Arrival, 
+	  	0,
+	  	f.Cost,
+	  	CAST(Departure + ' -> ' + Arrival AS NVARCHAR(MAX))
+	FROM flightPlan f
+	WHERE Departure = 'Vienna'
+	UNION ALL
+	SELECT 
+	  	p.Departure, f.Arrival, 
+	  	p.stops + 1,
+	  	p.totalCost + f.Cost,
+	  	p.route + ' -> ' + f.Arrival
+	FROM flightPlan f, flight_route p
+	WHERE p.Arrival = f.Departure AND 
+	      p.stops < 5)
+
+SELECT 
+	DISTINCT Arrival, 
+    totalCost
+FROM flight_route
+WHERE totalCost < 500;
+
+Arrival	totalCost
+Chicago	391.23
+New York	482.42
+Paris	74.88
+
+
 4.5. How to assemble a car?
 4.6. Create the parts list
+Define PartID as PRIMARY KEY of type INT.
+
+Define Cost of type INT and not to be NULL.
+
+Insert the root element SUV as described in the context section.
+
+Insert the entry Wheels as described in the context section.
+
+CREATE TABLE Bill_Of_Material (
+  	PartID INT NOT NULL PRIMARY KEY,
+	SubPartID INT,
+	Component VARCHAR(255) NOT NULL,
+	Title  VARCHAR(255) NOT NULL,
+	Vendor VARCHAR(255) NOT NULL,
+  	ProductKey CHAR(32) NOT NULL,
+  	Cost INT NOT NULL,
+	Quantity INT NOT NULL);
+
+INSERT INTO Bill_Of_Material
+VALUES ('1',NULL,'SUV','BMW X1','BMW','F48',50000,1);
+INSERT INTO Bill_Of_Material
+VALUES ('2','1','Engine','V6BiTurbro','BMW','EV3891ASF',3000,1);
+INSERT INTO Bill_Of_Material
+VALUES ('3','1','Body','AL_Race_Body','BMW','BD39281PUO',5000,1);
+INSERT INTO Bill_Of_Material
+VALUES ('4','1','Interior Decoration','All_Leather_Brown','BMW','ZEU198292',2500,1);
+INSERT INTO Bill_Of_Material
+VALUES ('5','1','Wheels','M-Performance 19/255','BMW','MKQ134098URZ',400,4);
+
+SELECT * 
+FROM Bill_Of_Material;
+
+PartID	SubPartID	Component		Title			Vendor	ProductKey	Cost	Quantity
+1	null		SUV			BMW X1			BMW	F48             50000	1
+2	1		Engine			V6BiTurbro		BMW	EV3891ASF       3000	1
+3	1		Body			AL_Race_Body		BMW	BD39281PUO      5000	1
+4	1		Interior Decoration	All_Leather_Brown	BMW	ZEU198292       2500	1
+5	1		Wheels			M-Performance 19/255	BMW	MKQ134098URZ    400	4
+
 4.7. Create a car's bill of material
+Define construction_Plan with the fields: PartID, SubPartID, Title, Component and Level.
+
+Initialize the field Level to 1.
+
+Increase Level by 1 in every recursion step.
+
+Limit the number of steps to Level = 2.
+
+WITH construction_Plan (PartID, SubPartID, Title, Component, Level) AS (
+	SELECT 
+  		PartID,
+  		SubPartID,
+  		Title,
+  		Component,
+  		1
+	FROM partList
+	WHERE PartID = '1'
+	UNION ALL
+	SELECT 
+		CHILD.PartID, 
+  		CHILD.SubPartID,
+  		CHILD.Title,
+  		CHILD.Component,
+  		PARENT.Level + 1
+	FROM construction_Plan PARENT, partList CHILD
+  	WHERE CHILD.SubPartID = PARENT.PartID
+	  AND PARENT.Level < 2)
+
+SELECT DISTINCT PartID, SubPartID, Title, Component, Level
+FROM construction_Plan
+ORDER BY PartID, SubPartID, Level;
+
+PartID	SubPartID	Title			Component		Level
+1	null		BMW X1	 		SUV			1
+2	1		V6BiTurbro		Engine			2
+3	1	 	AL_Race_Body	 	Body			2
+4	1	 	All_Leather_Brown	Interior Decoration	2
+5	1	 	M-Performance 19/255	Wheels			2
+
+
+
 4.8. Build up a BMW?
+Define construction_Plan with the necessary fields.
+
+Initialize Total with the Quantity in the anchor element of CTE.
+
+Increase Total with the Quantity of the child element in the recursion element.
+
+Use SUM() to create the sum of Total on the aggregated information on IDs of the hierarchy.
+
+WITH construction_Plan (PartID, SubPartID, Level, Component, Total) AS (
+	SELECT 
+  		PartID,SubPartID,
+  		0,
+  		Component,
+  		Quantity
+	FROM partList
+	WHERE PartID = '1'
+	UNION ALL
+	SELECT 
+		CHILD.PartID, CHILD.SubPartID,
+  		PARENT.Level + 1,
+  		CHILD.Component,
+  		PARENT.Total + CHILD.Quantity
+	FROM construction_Plan PARENT, partList CHILD
+  	WHERE CHILD.SubPartID = PARENT.PartID
+	  AND PARENT.Level < 3)
+      
+SELECT 
+    PartID, SubPartID,Component,
+    SUM(Total)
+FROM construction_Plan
+GROUP BY PartID, SubPartID, Component
+ORDER BY PartID, SubPartID;
+
+PartID	SubPartID	Component	
+1		null	 	SUV			1
+2		1	 		Engine		2
+3		1	 		Body		2
+...
+
+
+
 4.9. Modeling a power grid
 4.10. Create a power grid
+CREATE the structure table.
+
+Define the EquipmentID field as a PRIMARY KEY of type INT.
+
+Insert the record for line 1: 1, 2, , ‘HV’, ‘Cable’, 2000, 2016, 'good’
+
+Insert the record for line 14: - 14, 15, 3, ‘MV’, ‘Cable’, 1976, 2002, 'bad’
+
+CREATE TABLE structure (
+  	EquipmentID INT NOT NULL PRIMARY KEY,
+    EquipmentID_To INT ,
+    EquipmentID_From INT, 
+    VoltageLevel TEXT NOT NULL,
+    Description TEXT NOT NULL,
+    ConstructionYear INT NOT NULL,
+    InspectionYear INT NOT NULL,
+    ConditionAssessment TEXT NOT NULL
+);
+
+INSERT INTO structure
+VALUES ( 1, 2, NULL, 'HV', 'Cable', 2000, 2016, 'good');
+INSERT INTO Structure
+VALUES ( 2, 3 , 1, 'HV', 'Overhead Line', 1968, 2016, 'bad');
+INSERT INTO Structure
+VALUES ( 3, 14, 2, 'HV', 'TRANSFORMER', 1972, 2001, 'good');
+INSERT INTO Structure
+VALUES ( 14, 15, 3 , 'MV', 'Cable', 1976, 2002, 'bad');
+
+SELECT * 
+FROM structure;
+
+EquipmentID	EquipmentID_To	EquipmentID_From	VoltageLevel	Description	ConstructionYear	InspectionYear	ConditionAssessment
+1		2		null			HV		Cable		2000			2016		good
+2		3		1			HV		Overhead Line	1968			2016		bad
+3		14		2			HV		TRANSFORMER	1972			2001		good
+14		15		3			MV		Cable		1976			2002		bad
+
 4.11. Get power lines to maintain
+Define the CTE maintenance_List.
+Start the evaluation for line 3.
+Join GridStructure with maintenance_List on the corresponding endpoints.
+Use LIKE to filter the power lines with ConditionAssessment of either exchange or repair, and a VoltageLevel of HV.
+WITH maintenance_List (Line, Destination, Source, Description, ConditionAssessment, VoltageLevel) AS (
+SELECT 
+	EquipmentID,
+	EquipmentID_To,
+	EquipmentID_From,
+	Description,
+	ConditionAssessment,
+	VoltageLevel
+FROM GridStructure
+WHERE EquipmentID = 3
+UNION ALL
+SELECT 
+	Child.EquipmentID, 
+	Child.EquipmentID_To,
+	Child.EquipmentID_FROM,
+	Child.Description,
+	Child.ConditionAssessment,
+	Child.VoltageLevel
+FROM GridStructure Child
+	JOIN maintenance_List 
+ON maintenance_List.Line = Child.EquipmentID_From)
+SELECT Line, Description, ConditionAssessment 
+FROM maintenance_List
+WHERE 
+    (ConditionAssessment LIKE '%exchange%' OR ConditionAssessment LIKE '%repair%') AND 
+     VoltageLevel LIKE '%HV%'
+
+Line	Description	ConditionAssessment
+3	Cabel		repair
+6	OverheadLine	exchange
+8	OverheadLine	exchange
+
+
 4.12. Summary of the course
