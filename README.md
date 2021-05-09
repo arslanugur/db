@@ -17,7 +17,7 @@
     05. Functions for Manipulating Data in SQL Server*
     06. Database Design
     07. Hierarchical and Recursive Queries in SQL Server
-    08. Transactions and Error Handling in SQL Server*
+    08. Transactions and Error Handling in SQL Server
     09. Writing Functions and Stored Procedures in SQL Server
     10. Building and Optimizing Triggers in SQL Server
     11. Improving Query Performance in SQL Server
