@@ -1,5 +1,21 @@
 # Databases Research & Exercises
 
+> SQL
+|[Basic Concepts]()            |[Filtering, Functions, Subqueries]()|[JOIN, Table Operations]()        |
+|:----------------------------:|:----------------------------------:|:--------------------------------:|
+|[Introduction to Databases]() |[The WHERE Statement]()             |[Joining Tables]()                |
+|[SQL Statements: SELECT]()    |[Filtering with AND, OR]()          |[Types of Join]()                 |
+|[SQL Syntax Rules]()          |[IN, NOT IN Statements]()           |[UNION]()                         |
+|[Selecting Multiple Columns]()|[Custom Columns]()                  |[The INSERT Statement]()          |
+|[DISTINCT and LIMIT]()        |[Functions]()                       |[UPDATE and DELETE Statements]()  |
+|[Sorting Results]()           |[Subqueries]()                      |[Creating a Table]()              |
+|[Module 1 Quiz]()             |[LIKE and MIN]()                    |[NOT NULL and AUTO_INCREMENT]()   |
+|[Demo: Cakes]()               |[Module 2 Quiz]()                   |[Alter, Drop, Rename a Table]()   |
+|                              |[Demo: Apartments]()                |[Views]()                         |
+|                              |                                    |[Module 3 Quiz]()                 |
+|[Challenge 1]()               |[Challenge 2]()                     |[Demo: Zoo]()                     |
+
+
 > Stanford University on edX
  - Databases: Relational Databases and SQL
  - Databases: OLAP and Recursion 
