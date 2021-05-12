@@ -1,6 +1,7 @@
 # Databases Research & Exercises
 
 > SQL
+
 |[Basic Concepts]()            |[Filtering, Functions, Subqueries]()|[JOIN, Table Operations]()        |
 |:----------------------------:|:----------------------------------:|:--------------------------------:|
 |[Introduction to Databases]() |[The WHERE Statement]()             |[Joining Tables]()                |
