@@ -41,3 +41,7 @@
 
 
 [Introduction to Using MongoDB for Data Science in Python](/Introduction%20to%20Using%20MongoDB%20for%20Data%20Science%20in%20Py)
+ - [01. Flexibly Structured Data.py](/Introduction%20to%20Using%20MongoDB%20for%20Data%20Science%20in%20Py/01.%20Flexibly%20Structured%20Data.py)
+ - [02. Working with Distinct Values and Sets.py](/Introduction%20to%20Using%20MongoDB%20for%20Data%20Science%20in%20Py/02.%20Working%20with%20Distinct%20Values%20and%20Sets.py)
+ - [03. Get Only What You Need, and Fast.py](/Introduction%20to%20Using%20MongoDB%20for%20Data%20Science%20in%20Py/03.%20Get%20Only%20What%20You%20Need%2C%20and%20Fast.py)
+ - [04. Aggregation Pipelines: Let the Server Do It For You.py](/Introduction%20to%20Using%20MongoDB%20for%20Data%20Science%20in%20Py/04.%20Aggregation%20Pipelines:%20Let%20the%20Server%20Do%20It%20For%20You.py)
