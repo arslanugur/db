@@ -40,4 +40,4 @@
  - [11. Improving Query Performance in SQL Server](/Data%20Analyst%20with%20SQL%20Server/11.%20Improving%20Query%20Performance%20in%20SQL%20Server.sql)
 
 
- - [Introduction to Using MongoDB for Data Science in Python](/Introduction%20to%20Using%20MongoDB%20for%20Data%20Science%20in%20Py)
+[Introduction to Using MongoDB for Data Science in Python](/Introduction%20to%20Using%20MongoDB%20for%20Data%20Science%20in%20Py)
