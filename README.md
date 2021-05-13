@@ -4,15 +4,15 @@
 
 |[Basic Concepts](/sql)        |[Filtering, Functions, Subqueries](/sql)|[JOIN, Table Operations](/sql)|
 |:----------------------------:|:--------------------------------------:|:----------------------------:|
-|[Introduction to Databases](/sql/introduction-to-databases.sql) |[The WHERE Statement]()             |[Joining Tables]()                |
-|[SQL Statements: SELECT](/sql/sql-statements-SELECT.sql)    |[Filtering with AND, OR]()          |[Types of Join]()                 |
-|[SQL Syntax Rules](/sql-syntax-rules.sql)          |[IN, NOT IN Statements]()           |[UNION]()                         |
-|[Selecting Multiple Columns](/sql/selecting-multiple-columns.sql)   |[Custom Columns]()                  |[The INSERT Statement]()          |
-|[DISTINCT and LIMIT](/sql/DISTINCT-and-LIMIT.sql)        |[Functions]()                       |[UPDATE and DELETE Statements]()  |
-|[Sorting Results](/sql/sorting-results.sql)           |[Subqueries]()                      |[Creating a Table]()              |
-|[Module 1 Quiz](/sql/module-1-quiz.sql)             |[LIKE and MIN]()                    |[NOT NULL and AUTO_INCREMENT]()   |
-|[Demo: Cakes](/sql/demo-cakes.sql)               |[Module 2 Quiz]()                   |[Alter, Drop, Rename a Table]()   |
-|                              |[Demo: Apartments]()                |[Views]()                         |
+|[Introduction to Databases](/sql/introduction-to-databases.sql)|[The WHERE Statement](/sql/the-WHERE-statement.sql)|[Joining Tables]()|
+|[SQL Statements: SELECT](/sql/sql-statements-SELECT.sql)|[Filtering with AND, OR](/sql/filtering-with-AND-OR.sql)|[Types of Join]()|
+|[SQL Syntax Rules](/sql-syntax-rules.sql)|[IN, NOT IN Statements](/sql/IN-NOT-IN-statements.sql)|[UNION]()|
+|[Selecting Multiple Columns](/sql/selecting-multiple-columns.sql)|[Custom Columns](/sql/custom-columns.sql)|[The INSERT Statement]()          |
+|[DISTINCT and LIMIT](/sql/DISTINCT-and-LIMIT.sql)|[Functions](/sql/functions.sql)|[UPDATE and DELETE Statements]()|
+|[Sorting Results](/sql/sorting-results.sql)|[Subqueries](/sql/subqueries.sql)|[Creating a Table]()|
+|[Module 1 Quiz](/sql/module-1-quiz.sql)|[LIKE and MIN](/sql/LIKE-and-MIN.sql)|[NOT NULL and AUTO_INCREMENT]()|
+|[Demo: Cakes](/sql/demo-cakes.sql)|[Module 2 Quiz](/sql/module-2-quiz.sql)|[Alter, Drop, Rename a Table]()|
+|                              |[Demo: Apartments](/sql/demo-apartments.sql)|[Views]()|
 |                              |                                    |[Module 3 Quiz]()                 |
 |[Challenge 1]()               |[Challenge 2]()                     |[Demo: Zoo]()                     |
 
