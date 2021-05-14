@@ -4,9 +4,9 @@
 
 |[Basic Concepts](/sql)        |[Filtering, Functions, Subqueries](/sql)|[JOIN, Table Operations](/sql)|
 |:----------------------------:|:--------------------------------------:|:----------------------------:|
-|[Introduction to Databases](/sql/introduction-to-databases.sql)|[The WHERE Statement](/sql/the-WHERE-statement.sql)|[Joining Tables]()|
-|[SQL Statements: SELECT](/sql/sql-statements-SELECT.sql)|[Filtering with AND, OR](/sql/filtering-with-AND-OR.sql)|[Types of Join]()|
-|[SQL Syntax Rules](/sql-syntax-rules.sql)|[IN, NOT IN Statements](/sql/IN-NOT-IN-statements.sql)|[UNION]()|
+|[Introduction to Databases](/sql/introduction-to-databases.sql)|[The WHERE Statement](/sql/the-WHERE-statement.sql)|[Joining Tables](/sql/joining-tables.sql)|
+|[SQL Statements: SELECT](/sql/sql-statements-SELECT.sql)|[Filtering with AND, OR](/sql/filtering-with-AND-OR.sql)|[Types of Join](/sql/types-of-join.sql)|
+|[SQL Syntax Rules](/sql-syntax-rules.sql)|[IN, NOT IN Statements](/sql/IN-NOT-IN-statements.sql)|[UNION](/sql/UNION.sql)|
 |[Selecting Multiple Columns](/sql/selecting-multiple-columns.sql)|[Custom Columns](/sql/custom-columns.sql)|[The INSERT Statement]()          |
 |[DISTINCT and LIMIT](/sql/DISTINCT-and-LIMIT.sql)|[Functions](/sql/functions.sql)|[UPDATE and DELETE Statements]()|
 |[Sorting Results](/sql/sorting-results.sql)|[Subqueries](/sql/subqueries.sql)|[Creating a Table]()|
