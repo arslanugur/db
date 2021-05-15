@@ -14,7 +14,7 @@
 |[Demo: Cakes](/sql/demo-cakes.sql)|[Module 2 Quiz](/sql/module-2-quiz.sql)|[Alter, Drp, Rename a Table](/sql/alter-drop-rename-a-table.sql)|
 |                              |[Demo: Apartments](/sql/demo-apartments.sql)|[Views](/sql/views.sql)|
 |                              |                                    |[Module 3 Quiz](/sql/module-3-quiz.sql)|
-|[SQL CHALLENGES](/sql/challenges.sql)|                               |[Demo: Zoo](/sql/demo-zoo.sql)|
+||[Challenges](/sql/challenges.sql)                               |[Demo: Zoo](/sql/demo-zoo.sql)|
 
 
 > Stanford University on edX
