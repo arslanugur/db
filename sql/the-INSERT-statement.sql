@@ -25,14 +25,14 @@ SELECT * from Employees;
       The values are comma-separated and their order corresponds to the columns in the table.
       Result:
       id	firstname	lastname	age
-      1	  Emily	    Adams   	34
-      2	  Chloe	    Anderson	27
-      3	  Daniel	  Harris  	30
-      4	  James	    Roberts	  31
-      5	  John	    Smith	    35
-      6	  Andrew	  Thomas	  45
-      7	  David	    Williams	23
-      8	  Anthony	  Young   	35
+      1	  Emily	Adams   	34
+      2	  Chloe	Anderson	27
+      3	  Daniel	Harris  	30
+      4	  James	Roberts	31
+      5	  John	Smith	      35
+      6	  Andrew	Thomas	45
+      7	  David	Williams	23
+      8	  Anthony	Young   	35
       
       When inserting records into a table using the SQL INSERT statement, 
       you must provide a value for every column that does not have a default value, or does not support NULL.
@@ -55,14 +55,14 @@ SELECT * FROM Employees;
       This will insert the data into the corresponding columns:
       Result:
       id	firstname	lastname	age
-      1  	Emily	    Adams   	34
-      2	  Chloe	    Anderson	27
-      3	  Daniel	  Harris	  30
-      4	  James	    Roberts	  31
-      5	  John	    Smith   	35
-      6	  Andrew	  Thomas  	45
-      7	  David	    Williams	23
-      8	  Anthony	  Young	    35
+      1  	Emily       Adams   	34
+      2	Chloe       Anderson	27
+      3	Daniel	Harris	30
+      4	James	      Roberts	31
+      5	John	      Smith   	35
+      6	Andrew	Thomas  	45
+      7	David	      Williams	23
+      8	Anthony	Young	      35
       
       You can specify your own column order, as long as the values are specified in the same order as the columns.
       
@@ -77,15 +77,15 @@ SELECT * from Employees;
 
       Result:
       id	firstname	lastname	age
-      1	  Emily	    Adams   	34
-      2	  Chloe	    Anderson	27
-      3	  Daniel	  Harris  	30
-      4	  James	    Roberts 	31
-      5	  John	    Smith	    35
-      6	  Andrew	  Thomas  	45
-      7	  David	    Williams	23
-      8	  Anthony	  Young   	35
-      9	  Samuel	  Clark	    0
+      1	Emily	      Adams   	34
+      2	Chloe	      Anderson	27
+      3	Daniel	Harris  	30
+      4	James	      Roberts 	31
+      5	John	      Smith	      35
+      6	Andrew	Thomas  	45
+      7	David	      Williams	23
+      8	Anthony	Young   	35
+      9	Samuel	Clark	      0
       
       The Age column for that row automatically became 0, as that is its default value.
       
