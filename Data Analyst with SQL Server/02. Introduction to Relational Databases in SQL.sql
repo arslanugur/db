@@ -46,7 +46,9 @@ Course Description
 
 
 3. Uniquely identify records with key constraints
-      Now let’s get into the best practices of database engineering. It's time to add primary and foreign keys to the tables. These are two of the most important concepts in databases, and are the building blocks you’ll use to establish relationships between tables.
+      Now let’s get into the best practices of database engineering. It's time to add primary and foreign keys to the tables. 
+      These are two of the most important concepts in databases, 
+      and are the building blocks you’ll use to establish relationships between tables.
 
 3.1. Keys and superkeys
 3.2. Get to know SELECT COUNT DISTINCT
@@ -61,7 +63,8 @@ Course Description
 
 
 4. Glue together tables with foreign keys
-      In the final chapter, you'll leverage foreign keys to connect tables and establish relationships that will greatly benefit your data quality. And you'll run ad hoc analyses on your new database.
+      You'll leverage foreign keys to connect tables and establish relationships that will greatly benefit your data quality. 
+      And you'll run ad hoc analyses on your new database.
 
 
 4.1. Model 1:N relationships with foreign keys
