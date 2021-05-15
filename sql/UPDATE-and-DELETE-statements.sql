@@ -13,7 +13,7 @@ WHERE condition;
       
       id |FirstName |LastName |Salary
       -----------------------------
-      1  |John      |Smiths	  |2000
+      1  |John      |Smiths	|2000
       2  |David     |Williams |1500
       3  |Chloe     |Anderson |3000
       4  |Emily     |Adams    |4500
@@ -24,11 +24,32 @@ UPDATE Employees
 SET Salary=5000
 WHERE ID=1;
 SELECT * from Employees;
-
-      id	firstname	lastname	salary
+      
+      Result:
+      id	firstname	    lastname	salary
       2	  David	    Williams	1500
-      3	  Chloe	    Anderson	3000
-      4	  Emily	    Adams	    4500
-      1	  John	    Smith	    5000
+      3	  Chloe	    Anderson      3000
+      4	  Emily	    Adams	      4500
+      1	  John	    Smith	      5000
       
       
+     to update the ''students'' table by changing the university's value to ''Stanford'' if the student's name is ''John''.
+UPDATE students 
+SET university='Stanford'
+WHERE name='John';
+
+--Updating Multiple Columns
+      It is also possible to UPDATE multiple columns at the same time by comma-separating them:
+UPDATE Employees 
+SET Salary=5000, FirstName='Robert'
+WHERE ID=1;
+SELECT * from Employees;
+
+      Result:
+      id	firstname	lastname	salary
+      2	David	      Williams	1500
+      3	Chloe	      Anderson	3000
+      4	Emily	      Adams	      4500
+      1	Robert	Smith	      5000
+      
+      You can specify the column order any way you like in the SET clause.
