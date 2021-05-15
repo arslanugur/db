@@ -73,10 +73,10 @@ WHERE ID=1;
 SELECT * from Employees;
 
       Result:
-      id	firstname	lastname	salary
-      2	David	      Williams	1500
-      3	Chloe	      Anderson	3000
-      4	Emily	      Adams	      4500
+      id  firstname   lastname	salary
+      2     David	      Williams	1500
+      3     Chloe	      Anderson	3000
+      4     Emily	      Adams       4500
       
       If you omit the WHERE clause, all records in the table will be deleted!
       
