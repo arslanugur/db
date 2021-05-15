@@ -7,14 +7,14 @@
 |[Introduction to Databases](/sql/introduction-to-databases.sql)|[The WHERE Statement](/sql/the-WHERE-statement.sql)|[Joining Tables](/sql/joining-tables.sql)|
 |[SQL Statements: SELECT](/sql/sql-statements-SELECT.sql)|[Filtering with AND, OR](/sql/filtering-with-AND-OR.sql)|[Types of Join](/sql/types-of-join.sql)|
 |[SQL Syntax Rules](/sql-syntax-rules.sql)|[IN, NOT IN Statements](/sql/IN-NOT-IN-statements.sql)|[UNION](/sql/UNION.sql)|
-|[Selecting Multiple Columns](/sql/selecting-multiple-columns.sql)|[Custom Columns](/sql/custom-columns.sql)|[The INSERT Statement]()          |
-|[DISTINCT and LIMIT](/sql/DISTINCT-and-LIMIT.sql)|[Functions](/sql/functions.sql)|[UPDATE and DELETE Statements]()|
-|[Sorting Results](/sql/sorting-results.sql)|[Subqueries](/sql/subqueries.sql)|[Creating a Table]()|
-|[Module 1 Quiz](/sql/module-1-quiz.sql)|[LIKE and MIN](/sql/LIKE-and-MIN.sql)|[NOT NULL and AUTO_INCREMENT]()|
-|[Demo: Cakes](/sql/demo-cakes.sql)|[Module 2 Quiz](/sql/module-2-quiz.sql)|[Alter, Drop, Rename a Table]()|
-|                              |[Demo: Apartments](/sql/demo-apartments.sql)|[Views]()|
-|                              |                                    |[Module 3 Quiz]()                 |
-|[Challenge 1]()               |[Challenge 2]()                     |[Demo: Zoo]()                     |
+|[Selecting Multiple Columns](/sql/selecting-multiple-columns.sql)|[Custom Columns](/sql/custom-columns.sql)|[The INSERT Statement](/sql/the-INSERT-statement.sql)          |
+|[DISTINCT and LIMIT](/sql/DISTINCT-and-LIMIT.sql)|[Functions](/sql/functions.sql)|[UPDATE and DELETE Statements](/sql/UPDATE-and-DELETE-statements.sql)|
+|[Sorting Results](/sql/sorting-results.sql)|[Subqueries](/sql/subqueries.sql)|[Creating a Table](/sql/creating-a-table.sql)|
+|[Module 1 Quiz](/sql/module-1-quiz.sql)|[LIKE and MIN](/sql/LIKE-and-MIN.sql)|[NOT NULL and AUTO_INCREMENT](/sql/NOT-NULL-and-AUTO-INCREMENT.sql)|
+|[Demo: Cakes](/sql/demo-cakes.sql)|[Module 2 Quiz](/sql/module-2-quiz.sql)|[Alter, Drop, Rename a Table](/sql/alter-drop-rename-a-table.sql)|
+|                              |[Demo: Apartments](/sql/demo-apartments.sql)|[Views](/sql/views.sql)|
+|                              |                                    |[Module 3 Quiz](/sql/module-3-quiz.sql)|
+|[Challenge 1]()               |[Challenge 2]()                     |[Demo: Zoo](/sql/demo-zoo.sql)|
 
 
 > Stanford University on edX
