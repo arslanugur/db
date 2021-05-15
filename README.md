@@ -11,10 +11,10 @@
 |[DISTINCT and LIMIT](/sql/DISTINCT-and-LIMIT.sql)|[Functions](/sql/functions.sql)|[UPDATE and DELETE Statements](/sql/UPDATE-and-DELETE-statements.sql)|
 |[Sorting Results](/sql/sorting-results.sql)|[Subqueries](/sql/subqueries.sql)|[Creating a Table](/sql/creating-a-table.sql)|
 |[Module 1 Quiz](/sql/module-1-quiz.sql)|[LIKE and MIN](/sql/LIKE-and-MIN.sql)|[NOT NULL and AUTO_INCREMENT](/sql/NOT-NULL-and-AUTO-INCREMENT.sql)|
-|[Demo: Cakes](/sql/demo-cakes.sql)|[Module 2 Quiz](/sql/module-2-quiz.sql)|[Alter, Drop, Rename a Table](/sql/alter-drop-rename-a-table.sql)|
+|[Demo: Cakes](/sql/demo-cakes.sql)|[Module 2 Quiz](/sql/module-2-quiz.sql)|[Alter, Drp, Rename a Table](/sql/alter-drop-rename-a-table.sql)|
 |                              |[Demo: Apartments](/sql/demo-apartments.sql)|[Views](/sql/views.sql)|
 |                              |                                    |[Module 3 Quiz](/sql/module-3-quiz.sql)|
-|[Challenges](/sql/challenges.sql)|                               |[Demo: Zoo](/sql/demo-zoo.sql)|
+|[SQL CHALLENGES](/sql/challenges.sql)|                               |[Demo: Zoo](/sql/demo-zoo.sql)|
 
 
 > Stanford University on edX
