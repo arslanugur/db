@@ -19,20 +19,12 @@
 
 > Databases by Stanford University on edX
 
-|[Relational Databases and SQL](/sql)|[OLAP and Recursion ](/sql)|[Semistructured Data](/sql)|[Modeling and Theory](/sql)|[Advanced Topics in SQL](/sql)|
+|[Relational Databases and SQL](/sql)|[OLAP and Recursion ](/sql)|[Semistructured Data](/sql)|[Modeling and Theory](/sql)|[Advanced Topics in SQL](/Advanced%20Topics%20in%20SQL)|
 |:----------------:|:--------------------:|:------------------:|:---------------:|:---------------:|
-| | | | |[Indexes and Transactions]() |
-| | | | |[01. Indexes.pdf]() |
-| | | | |[02. Introduction to Transactions.pdf]() |
-| | | | |[03. Transactions Properties.pdf]() |
-| | | | |[04. Isolation Levels.pdf]() |
-| | | | |[Constraints and Triggers]() |
-| | | | |[01. Motivation and Overview.pdf]() |
-| | | | |[02. Constraints of Several Types.pdf]() |
-| | | | |[03. Referential Integrity.pdf]() |
-| | | | |[04. Triggers Introduction.pdf]() |
-| | | | |[05. Triggers Demo Part 1.pdf]() |
-| | | | |[06. Triggers Demo Part 2.pdf]() |
+| | | | |[Indexes and Transactions](/Advanced%20Topics%20in%20SQL/Indexes%20and%20Transactions) |
+| | | | |[Constraints and Triggers](/Advanced%20Topics%20in%20SQL/Constraints%20and%20Triggers) |
+| | | | |[Views and Authorization](/Advanced%20Topics%20in%20SQL/Views%20and%20Authorization) |
+
 
 
 > DataCamp
