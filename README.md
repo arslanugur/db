@@ -17,12 +17,12 @@
 ||[Challenges](/sql/challenges.sql)                               |[Demo: Zoo](/sql/demo-zoo.sql)|
 
 
-> Stanford University on edX
- - Databases: Relational Databases and SQL
- - Databases: OLAP and Recursion 
- - Databases: Semistructured Data
- - Databases: Modeling and Theory
- - Databases: Advanced Topics in SQL
+> Databases by Stanford University on edX
+
+|[Relational Databases and SQL](/sql)|[OLAP and Recursion ](/sql)|[Semistructured Data](/sql)|[Modeling and Theory](/sql)|[Advanced Topics in SQL](/sql)|
+|:----------------:|:--------------------:|:------------------:|:---------------:|:---------------:|
+| | | | | |
+
 
 > DataCamp
 
