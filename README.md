@@ -21,7 +21,18 @@
 
 |[Relational Databases and SQL](/sql)|[OLAP and Recursion ](/sql)|[Semistructured Data](/sql)|[Modeling and Theory](/sql)|[Advanced Topics in SQL](/sql)|
 |:----------------:|:--------------------:|:------------------:|:---------------:|:---------------:|
-| | | | | |
+| | | | |[Indexes and Transactions]() |
+| | | | |[01. Indexes.pdf]() |
+| | | | |[02. Introduction to Transactions.pdf]() |
+| | | | |[03. Transactions Properties.pdf]() |
+| | | | |[04. Isolation Levels.pdf]() |
+| | | | |[Constraints and Triggers]() |
+| | | | |[01. Motivation and Overview.pdf]() |
+| | | | |[02. Constraints of Several Types.pdf]() |
+| | | | |[03. Referential Integrity.pdf]() |
+| | | | |[04. Triggers Introduction.pdf]() |
+| | | | |[05. Triggers Demo Part 1.pdf]() |
+| | | | |[06. Triggers Demo Part 2.pdf]() |
 
 
 > DataCamp
