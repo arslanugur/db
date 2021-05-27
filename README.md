@@ -21,9 +21,15 @@
 
 |[Relational Databases and SQL](/sql)|[OLAP and Recursion ](/sql)|[Semistructured Data](/sql)|[Modeling and Theory](/sql)|[Advanced Topics in SQL](/Advanced%20Topics%20in%20SQL)|
 |:----------------:|:--------------------:|:------------------:|:---------------:|:---------------:|
-| | | | |[Indexes and Transactions](/Advanced%20Topics%20in%20SQL/Indexes%20and%20Transactions) |
-| | | | |[Constraints and Triggers](/Advanced%20Topics%20in%20SQL/Constraints%20and%20Triggers) |
-| | | | |[Views and Authorization](/Advanced%20Topics%20in%20SQL/Views%20and%20Authorization) |
+|[Introduction and Relational Databases]() | [On-Line Analytical Processing]()|[XML Data]()|[Introduction and Relational Databases]()|[Indexes and Transactions]() |
+|[SQL]()| [Recursion]()|[JSON Data]()|[Relational Algebra]()|[Constraints and Triggers]() |
+| | |[Querying XML with XPath and XQuery]()|[Relational Design Theory]()|[Views and Authorization]() |
+| | |[Querying XML with XSLT]()|[Unified Modeling Language]()||
+
+
+
+
+
 
 
 
