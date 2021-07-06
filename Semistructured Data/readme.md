@@ -1,4 +1,4 @@
-XML Data
-Json Data
-Querying XML with XPath and XQuery 
-Querying XML with XSLT
+- XML Data
+- Json Data
+- Querying XML with XPath and XQuery 
+- Querying XML with XSLT
