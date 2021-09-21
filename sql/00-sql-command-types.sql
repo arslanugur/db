@@ -1,0 +1,5 @@
+SQL Command Types
+  DDL - Data Definition Language --> Create, Alter, Drop, Rename, Truncate
+  DQL - Data Query Language --> Select
+  DML - Data Manipulation Language --> Insert, Update, Delete, Merge 
+  DCL - Data Control Language --> Grant, Revoke
