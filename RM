@@ -13,11 +13,6 @@ socket - priz
 switch - düğme
 
 geronimo
-youre as pretty as when you dumped me - beni bıraktığın gün kadar güzelsin
-
-
-you would be amazed what I do - daha neler yaparım şaşırırsın
-
 recon reports indians on the warpath in your area
 the vultures are circling the carcass - akbabalar dört dönüyor
 pit bull's out of the cage - aslan kafesten çıktı
@@ -27,7 +22,6 @@ same warmed-over characters - hep aynı karakterler
 patrol boat - devriye botu
 i will catch up - ben yetişirim
 pivot - önemli
-rain face - yağmur surat
 how could you have been so blind? - nasıl bu kadar kör olabildin ki
 exhilaration - coşku
 dont jiggle me - sarsma beni
@@ -45,7 +39,6 @@ contact -
 
 im just getting warmed up - daha yeni başlıyorum
 things is heating up - ortalık kızışıyor
-some people live a lifetime in a minute - kimileri bi ana bir ömür sığdırır.
 if you dont mind - sakıncası yoksa
 get tangled - ayakların dolanırsa
 they entertained me - beni oyaladı enlendirdi.
@@ -786,7 +779,10 @@ it's always about choice
 	Aslında bu bir erken uyarma mekanizmasıdır. Belirtiler kendini genelde ilgisizlik ve alışık olmadık davranışlar.  
 	Kadınlar acıdıkları erkeklere karşı cinsel çekim hissetmezler. 
 	Bir kadını kendinizden soğutmanın en hızlı yolu; zayıf, kendisine saygısı olmayan bir adam imajı çizmektir
-	
+
+	hakkında bir gizem yarat
+	birşeyi çok istemek başarının düşmanıdır.
+
 	eksiklerini söyle.. söylemezsen seni otorite olarak görmekten vazgeçer...
 	tehlikeli derecede heyecan verici ol... tahmin edilemez ol
 	başkalarını görüşlerine endişelenme
@@ -1054,6 +1050,7 @@ Manhood: to utter five little ill-advised word that every man, at some point in 
 	awesome time awesome = awesome squared - harika üstü harika
 	i am at the peak of my physical beauty
 	My brain froze from eating ice cream - dondurma yemekten beynim dondu
+	rain face - yağmur surat
 
 # Romance
 	i cant wait li cümleler
@@ -1114,20 +1111,22 @@ Manhood: to utter five little ill-advised word that every man, at some point in 
 	compliment: I love it, it suits you very well.. - ona bayılıyorum sana çok yakışıyor.. 
 	I have all the time in the world - elimde dünyanın yazı var..
 	u miss me?
+	youre as pretty as when you dumped me - beni bıraktığın gün kadar güzelsin
 
 
 	# Phases of I love you
-		- düşündüğün an
-		- bildiğin an
-		- bildiğini bildiğin ama söylemedin an:	i-love-you prude
-		- bildiğini bildiğin ama daha fazla saklayamadın an: encrypted way: pizza, oreo
-		- söylediğin an: lose your i-love-you-ginity
-		- sürekli söylediğin an: i-love-you slut
+		- the moment you think	- düşündüğün an
+		- the moment you know	- bildiğin an
+		- The moment when you knew s/he knew but you don't say (i-love-you prude) - onun bildiğini bildiğin ama söylemedin an
+		- The moment when you knew s/he knew but you don't hide any longer - bildiğini bildiğin ama daha fazla saklayamadın an: encrypted way: pizza, oreo
+		- the moment you say (lose your i-love-you-ginity) - söylediğin an
+		- when you always keep saying (i-love-you slut) - sürekli söylediğin an
 
 # X Bantering Lines
 	Hint: would be hard if she's warmed up before you're warmed up
 		that's why you need to warm up first and make your intentions clear
 
+	you would be amazed what I do - daha neler yaparım şaşırırsın
 	youre blinding me w ur shiny hair and ur boobed shaped boobs
 		parlak saçları ve biçimli göğslerinle
 	we can dress like naked people - çıplak insanlar gibi giyinebiliriz
@@ -1260,13 +1259,14 @@ Manhood: to utter five little ill-advised word that every man, at some point in 
 # Autobahn/Freeway/Highway Theory
 	Freeways have exits, so do relationships
 	Couples' duration of stay on the highway or taking an exit from the highway
-	● 6-hour exit		-> see and talk, x, douche, bye
-	● 4-day exit		-> talking with someone else
-	● 3-week exit		-> the early bloom of a romance / boredom
-	● 7-month exit		-> having connection
+	● 6-hour exit		-> see and talk, x, douche, bye 
+				-> lemon law: negative effect
+	● 4-day exit		-> talking with someone else, leave
+	● 3-week exit		-> the early bloom of a romance or boredom
+	● 7-month exit		-> having connection: Get started "Proactivity Phase" 
 	● 1.5-year exit		-> life skills: engagement, marriage, travel
 	● 18-year exit		-> family: child and boom
-	● final death exit
+	● final death exit	-> some people live a lifetime in a minute - kimileri bi ana bir ömür sığdırır
 
 	Remember:
 	* everything you encounter on the highway is a sign. 		Examples: £5 Trick
@@ -1280,12 +1280,18 @@ Manhood: to utter five little ill-advised word that every man, at some point in 
 		  çıkmak, flörtleşmek
 
 	expiration date on your mind?
-	have commitment issues? - bağlılık sorunları? ve neler bunlar?
 	expired - vadesi dolmuş
 	outdated - hükmü kalmamış, zaman aşımına uğramış, vadesi geçmiş, modası geçmiş
 	overdue - vadesi dolmuş
 
 	blue line - kss --> red line - nakd --> goal line - x
+
+	have commitment issues? - bağlılık sorunları? ve neler bunlar?
+		bağlanmaktan korktuğun için ayrılmak
+
+	# Lemon Law
+		The Lemon Law entitles either party on a date to call off the date 
+		within the first five minutes with no repercussions or hard feelings.
 
 	# Kadınlar duygusal gibi görünen rasyonellerdir.. Erkeklerse tersi
 		Kadınlar o an nasıl hissediyorlarsa öyle davranırlar. 
@@ -1407,7 +1413,7 @@ Manhood: to utter five little ill-advised word that every man, at some point in 
 	4. perks - ikramlar, artılar
 	5. tipping point - taşma noktası - tartışmalar * * *
 	0. "we got lazy" warning - tembelleştik... tryna get attraction
-	0. Threshold Notice - Eşikte olma bildirimi
+	0. threshold Notice - Eşikte olma bildirimi
 	6. purgatory - araf - 
 		hata olduğunu anlarsın ve kaçış yolu bulmaya başlarsın
 	7. confrontation - yüzleşme
@@ -1561,17 +1567,6 @@ I don't want to be a product of my environment. I want my environment to be a pr
 	çevrenin bir ürünü olmak istemiyorum, çevrenin benim ürünüm olmasını istiyorum
 
 
-
-# Tactics
-	hakkında bir gizem yarat
-	birşeyi çok istemek başarının düşmanıdır.
-	bağlanmaktan korktuğun için ayrılmak
-
-	
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 		
-# Lemon Law
-The Lemon Law entitles either party on a date to call off the date 
-		within the first five minutes with no repercussions or hard feelings.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
