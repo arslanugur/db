@@ -5,17 +5,55 @@ Relationship Manual (Emotional intelligence)
 	bedeli peşin ödenen kadınlar, bedel ödemeyi unutur hayatta
 
 	örüntüleri keşfetmek
+nice pull
+early bond
+any leads - ipucu...
 
 	Asla acını kimseyle paylaşma, bunu kullanırlar..
 
 	hayatta şans diye birşey yoktur, hayatın olağan akışında olasılıklar ve tesadüfler vardır...
 		mücadele, bunları nasıl değerlendiridiğinle ilgilidir.
-		olasılık	:
-		tesadüf		:
-		şans		:
+		olasılık / mümkünat	: bi olayda istenen sonucun olma oranı
+		tesadüf	/ rastlantı	: esasen bizim algı kapsamımız dışında kalan bölgeyi tanımlamak babında kullandığımız üstünkörü bir yafta, cehaletimizin örtüsüdür. gerçekte şu alemde tesadüfe yer yoktur.
+		şans			:
+
+poisson dağılımı
+
+olma olasılığı sıfıra yakın olupta olanlarına mucize denir.
+*** nothing costs nothing
+
+iki uç değer arasındaki ihtimaller bütünü. *
+temelde 1 yada 0'dır. yani bir olasılık ya mümkündür ya da mümkün değildir.
+bir olayın belirli bir sürede gözlenmesinin ya da ortaya çıkmasının göreli sıklığına ilişkin beklenti değeridir. yinelenmiş gözlemlerden yola çıkarak, bir olayın ortaya çıkmasını bekleme olarak da adlandırılabilmektedir.
+
+olasılık bilgi ile değişir. hiç bir bilgin yoksa sana göre yüzde 50 olan ihtimal bilgisi olana farklıdır. misal bir kutudan kedi çıkma ihtimali sence %50 dir, içindekini bilene göre %100 ya da %0 dır. 10 kutunun 9'unda kedi görene göre ise %90.
+(bkz: monty hall problemi)
+
+doğada olasılık yoktur, olacak olayın olma ihtimali %100'dür ve o olay olur. (bkz: determinizm)
+
+olasılıkta iki ekol vardır bu konuda. birisi frequentist yaklaşımı, diğeri epistemolojik* yaklaşımdır.
+ilki, bir olayın aynı şartlar altında tekrar tekrar denenmesiyle karar verilebileceği düşüncesindedir.
+ikincisi ise olasılığın tamamen kafamızda oluşturduğumuz belirsizlik derecesi olduğunu söyler. bir inancı vardır.
+örnek: frequentist bir bozuk paranın çok sayıda atılmasıyla kurallı bir bozuk para olduğuna karar verir.
+epistemolojik ise kurallı bozuk paranın yazı veya tura gelmesi ihtimali fifti fiftidir der ve buna inanır. ileriki edindiği bilgiler ile eski bilgisini günceller.
+ belli bir deneyin pek çok sefer tekrarlandığında, ilgilenilen özel bir sonucun ya da bir olayın gözlenme oranına, o olayın olasılığı denir.
+(bkz: rolatif frekans)
+muğlaklıktan mutlaklık çıkarımı yapabilme sanatı.
+alternatiflerin kendini gerçekleştirme* katsayıları.
+
+olasılık fonksiyonu negatif değerler alamaz. fakat biz doğal olarak hayatımızdaki durumlara iyi-kötü gibi değerlendirmeler yapıyoruz.
+mesela bu iyi ve kötülerin mutlak değerleri eşit olsa. mesela arabayla kaza yapma olasılığımız var ve korkuyoruz. o kazada kaybedeceklerimizi ne kadar fazlaysa o kadar çok. fakat bu korkunun bir yerden sonrası artık korkunun kendi korkusu. diyelim o kazada canımızı kaybedecek kadar şansız olduğumuza inanıyoruz. olasılıkların mutlak değerleri eşitse o kazada öldüğümüz anda yeniden diriliriz. değilse o arabaya hiç binmeyelim derim ben.
+
+beklediginiz otobusun en son gelen otobus olmasi rastlanti degil normaldir.
+ayrica bir sinegin uyuz bir sekilde surekli kulaginizin dibinde ucmasi da normaldir, cunku sinek sirf kulaginizin cevresinde ucmuyordur, sadece kulaginizin cevresinde ucarken sesini duyuyorsunuzdur.
+yanlis aradiginiz numaranin asla mesgul calmamasi da normaldir. bunlar rastlanti degildirler. zaten bunlarin rastlanti oldugunu iddia eden kimse de yok sanirim. ben
 
 
 	kokuya tanımlı olduğun canlısın
+
+
+	exponential process...
+
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
