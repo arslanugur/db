@@ -11,6 +11,13 @@ yaşanılan şeylerin de bir anlamı olmadı ve olmayacak,
 ya da birisi görsün diye bişeyleri yapmanın da bir anlamı yok.
 sadece işe yaramayan bir tampon başka bir anlamı da yok
 
+nispet - en büyük motivasyonlardan biri
+	defiance	nispet, meydan okuma, saygısızlık, karşı koyma, muhalefet
+	proportion	oranlamak, orantılı hale getirmek, pay, miktar, nispet, simetri, nicelik, uyum
+	spite		nispet, inat, garez, kin
+	relation	ilişki, bağıntı, bağlantı, ilgi, akrabalık, oran, alâka, ilişik, nispet, anlatma, söyleme
+	relativeness	ilgi, nispet, akrabalık
+
 
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -32,8 +39,8 @@ yolculuğa yalnız çıktığında uğurlu bir kolye vasaire bul
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 rüzgar gibi
-	hızlı geçen zaman için kullanılan tabir.
-	kitap rüzgar gibi geçer, okuduktan sonra hayat bir daha eskisi gibi geçmez.
+	"hızlı geçen zaman" için kullanılan tabir.
+	rüzgar gibi geçer, okuduktan sonra hayat bir daha eskisi gibi geçmez.
 	ihtişamlı bir film. rüzgar gibi geçmiyor, fırtına gibi yıkıyor her şeyi.
 
 sakinlik kazandırır, hırçınlık ve huysuzluk asla.	- frankly my dear i don't give a damn, after all, tomorrow is another day.
@@ -59,11 +66,7 @@ Mizojinizm
 	Kadın düşmanlığı veya mizojini, kadınlara karşı duyulan soğukluk, antipati veya abartılı düşmanlıktır. 
 	İngilizcedeki "misogyny" terimi Yunancadaki kadın (gyne) ve nefret etmek (misein) kelimelerinden türetilmiştir.
 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-cin gibi
-	adam çarpmak, kurnaz
-	örüntüleri keşfetmek
-profiteer
+
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 nice pull
@@ -74,7 +77,8 @@ any leads - ipucu...
 "yeterli cesaretin varsa itibarın olmadan da yaşayabilirsin."
 
 
-
+* * * 
+nothing costs nothing
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	hayatta şans diye birşey yoktur, hayatın olağan akışında olasılıklar ve tesadüfler vardır...
@@ -83,19 +87,23 @@ any leads - ipucu...
 		tesadüf	/ rastlantı	: esasen bizim algı kapsamımız dışında kalan bölgeyi tanımlamak babında kullandığımız üstünkörü bir yafta, cehaletimizin örtüsüdür. gerçekte şu alemde tesadüfe yer yoktur.
 		şans			:
 
-poisson dağılımı
+	poisson dağılımı
 
-olma olasılığı sıfıra yakın olupta olanlarına mucize denir.
-*** nothing costs nothing
+	olma olasılığı sıfıra yakın olupta olanlarına mucize denir.
 
-iki uç değer arasındaki ihtimaller bütünü. *
-temelde 1 yada 0'dır. yani bir olasılık ya mümkündür ya da mümkün değildir.
-bir olayın belirli bir sürede gözlenmesinin ya da ortaya çıkmasının göreli sıklığına ilişkin beklenti değeridir. yinelenmiş gözlemlerden yola çıkarak, bir olayın ortaya çıkmasını bekleme olarak da adlandırılabilmektedir.
+	iki uç değer arasındaki ihtimaller bütünü. *
+	temelde 1 yada 0'dır. yani bir olasılık ya mümkündür ya da mümkün değildir.
+	bir olayın belirli bir sürede gözlenmesinin ya da ortaya çıkmasının göreli sıklığına ilişkin beklenti değeridir. 
+	yinelenmiş gözlemlerden yola çıkarak, bir olayın ortaya çıkmasını bekleme olarak da adlandırılabilmektedir.
 
-olasılık bilgi ile değişir. hiç bir bilgin yoksa sana göre yüzde 50 olan ihtimal bilgisi olana farklıdır. misal bir kutudan kedi çıkma ihtimali sence %50 dir, içindekini bilene göre %100 ya da %0 dır. 10 kutunun 9'unda kedi görene göre ise %90.
-(bkz: monty hall problemi)
+	# Monty Hall Problemi
+		olasılık bilgi ile değişir. hiç bir bilgin yoksa sana göre yüzde 50 olan ihtimal bilgisi olana farklıdır. 
+		misal bir kutudan kedi çıkma ihtimali sence %50 dir, içindekini bilene göre %100 ya da %0 dır. 10 kutunun 9'unda kedi görene göre ise %90.
+	# Bayes Teoremi
+		bir olayın meydana gelme olasılığının, olaya yonelik ek bilgi edinilmesi halinde nasıl değişeceğini gösteren teorem
 
-doğada olasılık yoktur, olacak olayın olma ihtimali %100'dür ve o olay olur. (bkz: determinizm)
+	# Determinizm
+		doğada olasılık yoktur, olacak olayın olma ihtimali %100'dür ve o olay olur. (bkz: determinizm)
 
 olasılıkta iki ekol vardır bu konuda. birisi frequentist yaklaşımı, diğeri epistemolojik* yaklaşımdır.
 ilki, bir olayın aynı şartlar altında tekrar tekrar denenmesiyle karar verilebileceği düşüncesindedir.
@@ -220,11 +228,6 @@ yanlis aradiginiz numaranin asla mesgul calmamasi da normaldir. bunlar rastlanti
 
 	Göz altı torbalarından kurtulmak için birçok yöntem bulunmaktadır. Bu yöntemler arasında, cerrahi müdahale, dolgu ve mezoterapi uygulamaları ve lazer tedavisi gibi farklı seçenekler yer almaktadır. Cerrahi müdahale, göz altı torbalarını tamamen ortadan kaldırmak için kullanılan en etkili yöntemlerden biridir.
 
-
-
-
-
-	
 
 
 
@@ -364,7 +367,6 @@ onunlayken herşeyi yapıp onsuz onun için birşey yapmamak........
 
 	kendi sınırlarını bilmek - dürtülerinin peşinde koşmak - ama masumiyetini kaybetme
 
-
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 
@@ -440,6 +442,7 @@ stuntman
 # Possible Closures
 	no hard feelings
 	cheating
+	no long messages
 
 a man settle where he finds peace, noy money, not beauty, not status
 
@@ -1698,6 +1701,12 @@ one of the places where I feel the sun/enthusiasm rising inside me - içimdeki g
 		pops - babalık
 		your reputation precedes you - namın almış yürümüş
 		every dog has its day - everyone will have good luck or success at some point in their lives		dog has a week of holiday
+
+		cin gibi
+			adam çarpmak, kurnaz
+			örüntüleri keşfetmek
+		profiteer
+
 
 		ulterior - beyond, hidden
 		interior - inside
